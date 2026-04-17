@@ -11,7 +11,7 @@ Migration of an enterprise financial-planning / consolidation schema from SQL Se
 
 - [x] Phase 0 — SQL Server container + Snowflake account reachable; `Planning` DB + `WH_XS` / `PLANNING_DB.PLANNING` provisioned
 - [x] Phase 1 — Schemas loaded on both engines: `sqlserver/01_schema.sql` (baseline, FILESTREAM keyword stripped for Docker compat) + `snowflake/01_schema.sql` (migrated, with per-table translation rationale inline)
-- [ ] Phase 2 — Missing functions/views reconstructed (`tvf_ExplodeCostCenterHierarchy`, etc.)
+- [x] Phase 2 — Missing functions/views reconstructed: `tvf_ExplodeCostCenterHierarchy`, `fn_GetAllocationFactor`, `vw_AllocationRuleTargets` on both engines. Scope limited to objects actually called by procs 1 + 3 (deferred `fn_GetHierarchyPath`, `tvf_GetBudgetVariance`, `vw_BudgetConsolidationSummary`)
 - [ ] Phase 3 — AI translation pipeline runnable end-to-end
 - [ ] Phase 4 — Proc 1: `usp_ProcessBudgetConsolidation` migrated + verified
 - [ ] Phase 5 — Proc 3: `usp_ExecuteCostAllocation` migrated + verified
