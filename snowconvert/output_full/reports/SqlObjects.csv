@@ -1,0 +1,35 @@
+sql_object_id,file_path,sql_object_type,presence,line_number,lines_of_code,deployment_order
+dbo.UQ_BudgetLineItem_NaturalKey,database_unspecified/planning/index/uq_budgetlineitem_naturalkey.sql,INDEX,SOURCE_ONLY,1,3,3
+dbo.IX_ConsolidationJournal_RowGuid,database_unspecified/planning/index/ix_consolidationjournal_rowguid.sql,INDEX,SOURCE_ONLY,1,2,3
+dbo.IX_FiscalPeriod_OpenPeriods,database_unspecified/planning/index/ix_fiscalperiod_openperiods.sql,INDEX,SOURCE_ONLY,1,3,1
+dbo.NCCI_BudgetLineItem_Analytics,database_unspecified/dbo/unknown_type/budgetlineitem.sql,INDEX,SOURCE_ONLY,1,5,3
+dbo.IX_CostCenter_Hierarchy,database_unspecified/planning/index/ix_costcenter_hierarchy.sql,INDEX,SOURCE_ONLY,1,2,1
+Planning.BudgetLineItem,database_unspecified/planning/table/budgetlineitem.sql,TABLE,BOTH,4,48,2
+"Planning.usp_ReconcileIntercompanyBalances(INT,DATE,XML,DECIMAL,DECIMAL,BIT,XML,INT,DECIMAL)",database_unspecified/planning/procedure/usp_reconcileintercompanybalances.sql,PROCEDURE,BOTH,25,351,4*
+dbo.NCCI_GLAccount_Analytics,database_unspecified/dbo/unknown_type/glaccount.sql,INDEX,SOURCE_ONLY,1,2,1
+"Planning.usp_GenerateRollingForecast(INT,INT,INT,VARCHAR,NVARCHAR,DECIMAL,DECIMAL,VARCHAR,INT,NVARCHAR)",database_unspecified/planning/procedure/usp_generaterollingforecast.sql,PROCEDURE,BOTH,25,416,3
+dbo.IX_FiscalPeriod_Dates,database_unspecified/planning/index/ix_fiscalperiod_dates.sql,INDEX,SOURCE_ONLY,1,3,1
+Planning.HierarchyNodeTableType,database_unspecified/planning/type/hierarchynodetabletype.sql,TYPE,SOURCE_ONLY,4,13,0
+"Planning.usp_PerformFinancialClose(INT,VARCHAR,BIT,BIT,BIT,BIT,NVARCHAR,BIT,INT,XML,VARCHAR)",database_unspecified/planning/procedure/usp_performfinancialclose.sql,PROCEDURE,BOTH,30,462,5*
+Planning.FiscalPeriod,database_unspecified/planning/table/fiscalperiod.sql,TABLE,BOTH,4,25,0
+Planning.ConsolidationJournalLine,database_unspecified/planning/table/consolidationjournalline.sql,TABLE,BOTH,4,42,3
+"Planning.usp_ProcessBudgetConsolidation(INT,INT,VARCHAR,BIT,BIT,XML,INT,BIT,INT,NVARCHAR)",database_unspecified/planning/procedure/usp_processbudgetconsolidation.sql,PROCEDURE,BOTH,26,435,3*
+dbo.NCCI_ConsolidationJournalLine,database_unspecified/dbo/unknown_type/consolidationjournalline.sql,INDEX,SOURCE_ONLY,1,5,4
+Planning.CostCenter,database_unspecified/planning/table/costcenter.sql,TABLE,BOTH,6,28,0
+dbo.IX_BudgetLineItem_Allocated,database_unspecified/planning/index/ix_budgetlineitem_allocated.sql,INDEX,SOURCE_ONLY,1,3,3
+Planning.BudgetLineItemTableType,database_unspecified/planning/type/budgetlineitemtabletype.sql,TYPE,SOURCE_ONLY,10,21,0
+Planning.BudgetHeader,database_unspecified/planning/table/budgetheader.sql,TABLE,BOTH,4,36,1
+Planning.ConsolidationJournal,database_unspecified/planning/table/consolidationjournal.sql,TABLE,BOTH,4,47,2
+Planning.GLAccount,database_unspecified/planning/table/glaccount.sql,TABLE,BOTH,4,32,0
+Planning.AllocationRule,database_unspecified/planning/table/allocationrule.sql,TABLE,BOTH,4,43,1
+Planning.AllocationResultTableType,database_unspecified/planning/type/allocationresulttabletype.sql,TYPE,SOURCE_ONLY,6,16,0
+"Planning.usp_BulkImportBudgetData(VARCHAR,NVARCHAR,NVARCHAR,Planning.BudgetLineItemTableType,NVARCHAR,NVARCHAR,NVARCHAR,INT,VARCHAR,VARCHAR,INT,BIT,INT,XML,INT,INT)",database_unspecified/planning/procedure/usp_bulkimportbudgetdata.sql,PROCEDURE,BOTH,25,478,3*
+PUBLIC.OPENJSON_UDF(),UDF Helpers/JSON_UDF.sql,FUNCTION,SNOWFLAKE_ONLY,,,0
+PUBLIC.OBJECT_ID_UDF(),UDF Helpers/OBJECT_ID_UDF.sql,FUNCTION,SNOWFLAKE_ONLY,,,0
+PUBLIC.FOR_XML_UDF(),UDF Helpers/FOR_XML_UDF.sql,FUNCTION,SNOWFLAKE_ONLY,,,0
+PUBLIC.RAISERROR_UDF(),UDF Helpers/RAISERROR_UDF.sql,FUNCTION,SNOWFLAKE_ONLY,,,0
+PUBLIC.HIERARCHY_GET_LEVEL_UDF(),UDF Helpers/HIERARCHYID_UDF.sql,FUNCTION,SNOWFLAKE_ONLY,,,0
+PUBLIC.QUOTENAME_UDF(),UDF Helpers/QUOTENAME_UDF.sql,FUNCTION,SNOWFLAKE_ONLY,,,0
+PUBLIC.TRANSFORM_SP_EXECUTE_SQL_STRING_UDF(),UDF Helpers/TRANSFORM_SP_EXECUTE_SQL_STRING_UDF.sql,FUNCTION,SNOWFLAKE_ONLY,,,0
+PUBLIC.THROW_UDP(),UDF Helpers/THROW_UDP.sql,FUNCTION,SNOWFLAKE_ONLY,,,0
+PUBLIC.OPENXML_UDF(),UDF Helpers/OPENXML_UDF.sql,FUNCTION,SNOWFLAKE_ONLY,,,0

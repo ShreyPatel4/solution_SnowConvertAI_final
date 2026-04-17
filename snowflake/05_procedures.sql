@@ -1,72 +1,21 @@
--- =============================================================================
--- Snowflake migration of usp_ExecuteCostAllocation (proc 3)
--- =============================================================================
--- Source: original/src/StoredProcedures/usp_ExecuteCostAllocation.sql
---         (SQL Server T-SQL, ~430 lines)
+-- Snowflake migration of usp_ExecuteCostAllocation (proc 3).
+-- Source: original/src/StoredProcedures/usp_ExecuteCostAllocation.sql (~430 LOC T-SQL).
 --
--- Key translation decisions (each marked inline in the code below):
---
---   1. sp_getapplock / sp_releaseapplock  -> REMOVED.
---      Snowflake uses MVCC (multi-version concurrency).  Snapshot isolation at
---      statement level + ACID transactions remove the need for advisory locks
---      on "process coordination" here.  If true cross-session coordination were
---      required, we'd use a lock table + MERGE .. CONDITION.  The @ConcurrencyMode
---      parameter is accepted but ignored (documented as no-op).
---
---   2. WAITFOR DELAY  -> REMOVED.
---      No equivalent and not needed — Snowflake scales queries via warehouses,
---      not client-side throttling.  @ThrottleDelayMS is accepted but ignored.
---
---   3. GOTO CleanupAndExit  -> restructured.
---      Snowflake Scripting has no GOTO.  Replaced with early RETURN of the
---      error object (the "cleanup" in T-SQL was DROP TABLE for temps + lock
---      release, both automatic in Snowflake: temps drop at session end, no locks).
---
---   4. STRING_SPLIT(@AllocationRuleIDs, ',')  ->  SPLIT(:rule_ids, ',') + LATERAL FLATTEN.
---      Snowflake's SPLIT returns an ARRAY; FLATTEN explodes it into rows.
---
---   5. TRY_CONVERT(INT, x)  ->  TRY_CAST(x AS INT).
---
---   6. STRING_AGG(x, sep) WITHIN GROUP (ORDER BY y)  ->  LISTAGG(x, sep) WITHIN GROUP (ORDER BY y).
---
---   7. Recursive CTE with CHARINDEX cycle-detection  ->  recursive CTE with
---      string path (`path_str`) + POSITION() check.  Semantically identical.
---
---   8. CROSS APPLY (SELECT * FROM vw_AllocationRuleTargets vt WHERE ...)  ->
---      plain correlated subquery via JOIN — vw_AllocationRuleTargets is already
---      a view built on LATERAL FLATTEN (snowflake/03_views.sql).
---
---   9. @AllocationResults TVP (READONLY)  -> accepted as ARRAY (VARIANT).
---      In the source proc this parameter is declared but *never read* (it's a
---      placeholder for a future "pre-seeded results" workflow).  We preserve
---      the signature as VARIANT/ARRAY so callers don't have to change shape,
---      and we ignore the value — matching original behaviour.
---
---   10. #AllocationQueue, #AllocationResults, #ProcessedRules, #RuleDependencies
---       -> CREATE OR REPLACE TEMPORARY TABLE (session-scoped, dropped at session
---       end).  Note: Snowflake temp tables DO NOT support inline INDEX clauses
---       (the source has `INDEX IX_Sequence (...)` on #AllocationQueue).  Removed.
---
---   11. @@ROWCOUNT  ->  SQLROWCOUNT (no colon in assignment context — proven
---       pattern from proc 1).  Assigned to a scripting variable immediately
---       after the DML because SQLROWCOUNT gets reset by subsequent statements.
---
---   12. UPDATE q ... OUTPUT deleted.X INTO #table  -> RESTRUCTURED.
---       The OUTPUT clause was a vestigial latent bug in the source (see note
---       in sqlserver/05_procedures.sql for the patch rationale).  Dropped it —
---       downstream INSERT reads from #AllocationQueue by q.ProcessedDateTime
---       anyway.
---
---   13. UPDATE ... FROM ... CROSS APPLY ...  ->  UPDATE ... FROM <subquery>
---       with correlated filters on the outer row.
---
---   14. BIT params  ->  BOOLEAN.  Snowflake procedure params have no defaults;
---       caller must pass explicit values for every param.
---
---   15. BEGIN TRY / BEGIN CATCH  ->  EXCEPTION WHEN OTHER THEN block
---       (matches proc 1's pattern).  OUTPUT params return-channel folded
---       into a single VARIANT result object.
--- =============================================================================
+-- Translation notes:
+--   * sp_getapplock / sp_releaseapplock -> removed (MVCC; @ConcurrencyMode accepted, ignored)
+--   * WAITFOR DELAY -> removed (@ThrottleDelayMS accepted, ignored)
+--   * GOTO CleanupAndExit -> early RETURN (temps auto-drop; no locks to release)
+--   * STRING_SPLIT -> SPLIT + LATERAL FLATTEN
+--   * TRY_CONVERT -> TRY_CAST; STRING_AGG -> LISTAGG
+--   * recursive CTE cycle detection via path_str + POSITION()
+--   * CROSS APPLY vw_AllocationRuleTargets -> JOIN (view already LATERAL-FLATTENs the JSON)
+--   * @AllocationResults TVP -> ARRAY (unused in source; signature preserved)
+--   * #TempTable -> CREATE OR REPLACE TEMPORARY TABLE; inline INDEX clauses dropped
+--   * @@ROWCOUNT -> SQLROWCOUNT assigned to local var immediately after DML
+--   * UPDATE ... OUTPUT deleted.X -> plain UPDATE (OUTPUT was a vestigial source bug; see sqlserver/05_procedures.sql)
+--   * UPDATE FROM CROSS APPLY -> UPDATE FROM correlated subquery
+--   * fn_GetAllocationFactor inlined as LEFT JOIN CostCenter (scalar UDF + subquery not allowed inside INSERT)
+--   * BIT -> BOOLEAN; TRY/CATCH -> EXCEPTION WHEN OTHER; OUTPUT params -> single VARIANT return
 
 USE DATABASE PLANNING_DB;
 USE SCHEMA PLANNING;

@@ -107,6 +107,36 @@ Artifacts preserved:
 
 ---
 
+## Full 5-proc scai run
+
+A second scai run over **all 6 stored procedures** (proc 1 was included to keep the cross-comparison under one project). Output committed at `snowconvert/output_full/`:
+
+| Proc | Output lines | `!!!RESOLVE EWI!!!` markers |
+|---|---|---|
+| `usp_processbudgetconsolidation` | 595 | 16 |
+| `usp_performfinancialclose` | 569 | 16 |
+| `usp_bulkimportbudgetdata` | 585 | 7 |
+| `usp_generaterollingforecast` | 534 | 5 |
+| `usp_reconcileintercompanybalances` | 364 | 6 |
+
+Full-run Assessment metrics (from `snowconvert/output_full/reports/Assessment.csv`):
+
+| Field | Value |
+|---|---|
+| Total input LOC | 2529 |
+| Total converted LOC | 2349 |
+| Total files generated | 27 |
+| TotalErrors | 80 |
+| TotalOtherEWIs (conversion issues) | 77 |
+| TotalParsingErrors | 3 (same XML-index DDL that failed in the single-proc run) |
+| CodeCompletenessScore | **81.82%** (down from 94.44% when only proc 1 was in scope — the larger surface pulls in more irreducible T-SQL idioms) |
+| ConversionSpeed | 519 LOC/sec |
+| ElapsedTime | 00:00:04 |
+
+**These four outputs (procs 2, 4, 5, 6) are not verified.** They are committed for reviewer inspection as concrete evidence of scai's output quality on each proc. Loading any of them into Snowflake would require the same post-edit path described above per proc (strip BOM, resolve EWI markers, fix `:TRANCOUNT`/`CURRENT_TRANSACTION()` translation, drop savepoints or rewrite CATCH, drop `OUTPUT INTO` or substitute staging, audit any hard-coded literal widths against column DDL). Estimated human cleanup per proc: 30–60 minutes depending on EWI density. The pipeline architecture in `pipeline/translate.py` is designed to automate that cleanup as Layer 2 on top of scai's Layer 1.
+
+---
+
 ## Conclusion
 
 The honest assessment: **scai is the right first layer of a migration pipeline, and the hand-crafted + AI-pipeline + verification-harness approach in this repo is the right second and third layers on top**. scai handled 80% of the proc with a high-quality Snowflake Scripting skeleton in 11 seconds; a human or LLM pipeline was required to (1) collapse the cursor-aggregation to set-based, (2) catch the two latent bugs, (3) resolve 16 `!!!RESOLVE EWI!!!` markers, and (4) clean up translation debris (`:TRANCOUNT`, `CURRENT_TRANSACTION()`, `'CONSOLIDATED'`). The combined approach is strictly stronger than either alone. This repo's `pipeline/verify.py` run against scai's output (after human cleanup) would be the natural next experiment — a subject for a second iteration.

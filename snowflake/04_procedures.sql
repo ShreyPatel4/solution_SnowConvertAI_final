@@ -1,60 +1,18 @@
--- =============================================================================
--- Snowflake migration of usp_ProcessBudgetConsolidation
--- =============================================================================
--- Source: original/src/StoredProcedures/usp_ProcessBudgetConsolidation.sql
---         (SQL Server T-SQL, 510 lines)
+-- Snowflake migration of usp_ProcessBudgetConsolidation.
+-- Source: original/src/StoredProcedures/usp_ProcessBudgetConsolidation.sql (510 LOC T-SQL -> 383 LOC Scripting).
 --
--- Key translation decisions:
---
---   1. Cursors -> set-based operations.
---      - Hierarchy rollup cursor (FAST_FORWARD, bottom-up) was effectively
---        doing a GROUP BY per cost-center node and a MERGE into an
---        aggregation table.  The result is identical to one SET-BASED
---        INSERT-SELECT grouping on (GLAccount, CostCenter, FiscalPeriod).
---      - Elimination cursor (SCROLL KEYSET with FETCH RELATIVE for adjacent
---        pair matching) -> window function (LEAD) over ORDER BY
---        (GLAccountID, CostCenterID), which replicates the "next adjacent
---        row is an offset" check deterministically.
---
---   2. Table variables -> session temporary tables (scoped to this proc's
---      session).  SQL Server's indexed table variables don't map; we rely
---      on Snowflake's micro-partitioning for query performance on small
---      intermediate sets.
---
---   3. Named savepoints -> removed.  Snowflake has no SAVE TRANSACTION.
---      The proc uses a single linear transaction; on failure the whole
---      transaction rolls back via the EXCEPTION handler (compensating
---      cleanup is not needed since we build state in temp tables).
---
---   4. TRY-CATCH with THROW -> Scripting EXCEPTION block (WHEN OTHER).
---      Error info returned as a VARIANT payload instead of OUTPUT params.
---
---   5. SCOPE_IDENTITY() -> natural-key lookup.  The new BudgetHeader is
---      inserted with a deterministic BudgetCode (source code + _CONSOL_ +
---      YYYYMMDD), which is UNIQUE in schema; we read back the ID by code.
---
---   6. OUTPUT clause -> removed.  We don't need the captured-inserted-rows
---      behaviour since we build state in temp tables before the final INSERT.
---
---   7. CROSS APPLY to TVF -> FROM TABLE(tvf_ExplodeCostCenterHierarchy(...)).
---      Snowflake requires TABLE(...) wrapping for UDTFs.
---
---   8. sp_executesql + output params -> replaced with structured IF branches.
---      The original's dynamic SQL only conditionally changed the WHERE clause
---      and whether ROUND() wrapped the expression — easy to unroll statically.
---
---   9. XML .value() -> VARIANT : path :: type.
---      processing_options is VARIANT (was XML).  IncludeZeroBalances and
---      RoundingPrecision read via :Options:Field::TYPE.
---
---   10. OUTPUT params (@TargetBudgetHeaderID, @RowsProcessed, @ErrorMessage)
---       -> returned as a VARIANT object:
---         { success, target_budget_header_id, rows_processed,
---           consolidation_run_id, duration_seconds, error?, step?, ... }
---
---   11. BIT (0/1) -> BOOLEAN; default values (= 1, = NULL) must be supplied
---       by the caller since Snowflake procedure params don't have defaults.
--- =============================================================================
+-- Translation notes:
+--   * rollup cursor -> INSERT ... GROUP BY (ordering never flowed out)
+--   * elimination cursor (FETCH RELATIVE 1 with reassigned keys) -> LAG window fn
+--   * @table vars -> session temp tables
+--   * named savepoints dropped; single txn + EXCEPTION WHEN OTHER
+--   * SCOPE_IDENTITY -> natural-key readback via UQ_BudgetHeader_Code_Year
+--   * OUTPUT INTO dropped (state already in temp tables)
+--   * CROSS APPLY UDTF -> TABLE(...)
+--   * sp_executesql with @tbl ref -> unrolled static IF branches (also sidesteps latent bug #1)
+--   * XML .value() -> VARIANT :path::TYPE (ProcessingOptions is VARIANT)
+--   * OUTPUT params -> single VARIANT return object
+--   * BIT -> BOOLEAN; no param defaults in Snowflake, caller must pass all args
 
 USE DATABASE PLANNING_DB;
 USE SCHEMA PLANNING;
