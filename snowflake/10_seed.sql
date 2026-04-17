@@ -127,11 +127,44 @@ AS v(id, gl, cc, fp, orig, adj);
 
 
 -- -----------------------------------------------------------------------------
--- Row-count verification (expected: 3, 7, 5, 1, 12)
+-- AllocationRule (for proc 3 — usp_ExecuteCostAllocation).
+-- Mirrors sqlserver/10_seed.sql.  TargetSpecification is VARIANT JSON here
+-- (vs. XML on SQL Server); shape matches the vw_AllocationRuleTargets view's
+-- JSON path reader (Targets[].CostCenterID / Percentage / IsActive).
+-- IDs 10, 11 match the SQL Server side.
+-- -----------------------------------------------------------------------------
+INSERT INTO AllocationRule
+    (AllocationRuleID, RuleCode, RuleName, RuleType, AllocationMethod,
+     SourceCostCenterID, SourceCostCenterPattern, SourceAccountPattern,
+     TargetSpecification, AllocationBasis, RoundingMethod, RoundingPrecision,
+     ExecutionSequence, DependsOnRuleID, EffectiveFromDate, EffectiveToDate, IsActive)
+SELECT
+    id, code, rname, rtype, amethod,
+    scc, sccp, sap,
+    PARSE_JSON(tspec),
+    basis, rmeth, rprec,
+    eseq, depid, effrom, effto, act
+FROM VALUES
+    (10, 'RULE_NA_SPLIT', 'NA Rev Split', 'DIRECT', 'FIXED_PCT',
+     5, NULL, '4%',
+     '{"Targets":[{"CostCenterID":1,"Percentage":0.600000,"IsActive":true},{"CostCenterID":4,"Percentage":0.400000,"IsActive":true}]}',
+     'FIXED', 'NEAREST', 2,
+     10, NULL, '2020-01-01'::DATE, NULL, TRUE),
+    (11, 'RULE_EU_CORP', 'EU Rev to Sales', 'DIRECT', 'FIXED_PCT',
+     6, NULL, '4%',
+     '{"Targets":[{"CostCenterID":2,"Percentage":1.000000,"IsActive":true}]}',
+     'FIXED', 'NEAREST', 2,
+     20, NULL, '2020-01-01'::DATE, NULL, TRUE)
+AS v(id, code, rname, rtype, amethod, scc, sccp, sap, tspec, basis, rmeth, rprec, eseq, depid, effrom, effto, act);
+
+
+-- -----------------------------------------------------------------------------
+-- Row-count verification (expected: 3, 7, 5, 1, 12, 2)
 -- -----------------------------------------------------------------------------
 SELECT 'FiscalPeriod'   AS TableName, COUNT(*) AS N FROM FiscalPeriod
 UNION ALL SELECT 'CostCenter',     COUNT(*) FROM CostCenter
 UNION ALL SELECT 'GLAccount',      COUNT(*) FROM GLAccount
 UNION ALL SELECT 'BudgetHeader',   COUNT(*) FROM BudgetHeader
 UNION ALL SELECT 'BudgetLineItem', COUNT(*) FROM BudgetLineItem
+UNION ALL SELECT 'AllocationRule', COUNT(*) FROM AllocationRule
 ORDER BY TableName;

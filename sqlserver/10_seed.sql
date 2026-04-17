@@ -166,7 +166,53 @@ GO
 
 
 -- -----------------------------------------------------------------------------
--- Row-count verification (expected: 3, 7, 5, 1, 12)
+-- AllocationRule (for proc 3 — usp_ExecuteCostAllocation).
+-- Two deterministic DIRECT rules, each with explicit TargetSpecification XML.
+-- Source rows selected so target (BudgetHeaderID, GLAccountID, CostCenterID,
+-- FiscalPeriodID) tuples do NOT collide with the existing 12 seeded BLI rows:
+--   Rule 10: source = Revenue@SALES_NA Jan (row 1, $10,000)
+--            targets = CORP 60% + IT 40%  -> yields (GL=1, CC=1, FP=1) + (GL=1, CC=4, FP=1)
+--   Rule 11: source = Revenue@SALES_EU Jan (row 2, $8,000)
+--            targets = SALES 100%         -> yields (GL=1, CC=2, FP=1)
+-- None of those target tuples exist in the 12-row seed, so both engines will
+-- insert the same net count of new allocated rows.
+-- -----------------------------------------------------------------------------
+SET IDENTITY_INSERT Planning.AllocationRule ON;
+
+INSERT INTO Planning.AllocationRule
+    (AllocationRuleID, RuleCode, RuleName, RuleType, AllocationMethod,
+     SourceCostCenterID, SourceCostCenterPattern, SourceAccountPattern,
+     TargetSpecification, AllocationBasis, RoundingMethod, RoundingPrecision,
+     ExecutionSequence, DependsOnRuleID, EffectiveFromDate, EffectiveToDate, IsActive)
+VALUES
+    (10, 'RULE_NA_SPLIT', 'NA Rev Split', 'DIRECT', 'FIXED_PCT',
+     5, NULL, '4%',
+     CAST('<Targets>
+             <Target><CostCenterID>1</CostCenterID><Percentage>0.600000</Percentage><IsActive>1</IsActive></Target>
+             <Target><CostCenterID>4</CostCenterID><Percentage>0.400000</Percentage><IsActive>1</IsActive></Target>
+           </Targets>' AS XML),
+     'FIXED', 'NEAREST', 2,
+     10, NULL, '2020-01-01', NULL, 1),
+
+    (11, 'RULE_EU_CORP', 'EU Rev to Sales', 'DIRECT', 'FIXED_PCT',
+     6, NULL, '4%',
+     CAST('<Targets>
+             <Target><CostCenterID>2</CostCenterID><Percentage>1.000000</Percentage><IsActive>1</IsActive></Target>
+           </Targets>' AS XML),
+     'FIXED', 'NEAREST', 2,
+     20, NULL, '2020-01-01', NULL, 1);
+
+SET IDENTITY_INSERT Planning.AllocationRule OFF;
+GO
+
+-- BudgetHeader must be in DRAFT so INSERT into BudgetLineItem is not blocked
+-- by check-constraints or triggers tied to APPROVED/LOCKED.  Proc 1 needs
+-- APPROVED, proc 3 does not guard on status.  Leaving as APPROVED (from the
+-- original seed) is fine — proc 3 writes regardless.
+
+
+-- -----------------------------------------------------------------------------
+-- Row-count verification (expected: 3, 7, 5, 1, 12, 2)
 -- -----------------------------------------------------------------------------
 SELECT 'FiscalPeriod'   AS TableName, COUNT(*) AS N FROM Planning.FiscalPeriod
 UNION ALL
@@ -177,5 +223,7 @@ UNION ALL
 SELECT 'BudgetHeader',   COUNT(*) FROM Planning.BudgetHeader
 UNION ALL
 SELECT 'BudgetLineItem', COUNT(*) FROM Planning.BudgetLineItem
+UNION ALL
+SELECT 'AllocationRule', COUNT(*) FROM Planning.AllocationRule
 ORDER BY TableName;
 GO
