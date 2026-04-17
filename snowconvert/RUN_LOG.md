@@ -6,22 +6,22 @@ The install blocker below was resolved by running the installer directly
 in Terminal.app (outside Claude Code, where sudo can prompt). The full
 sequence that ran end-to-end on this machine:
 
-1. `brew install --cask snowconvert-ai` — run in Terminal.app so the
+1. `brew install --cask snowconvert-ai` - run in Terminal.app so the
    `sudo installer` step could receive a password prompt. Installed
    scai 2.20.0.
-2. `brew install snowflake-cli` — Homebrew formula (no sudo), installs
+2. `brew install snowflake-cli` - Homebrew formula (no sudo), installs
    the `snow` CLI that scai uses to resolve Snowflake connections.
 3. `snow connection add --connection-name default --account prc57893.us-east-1
    --user SHREYP412 --password <PAT> --role ACCOUNTADMIN --warehouse WH_XS
-   --database PLANNING_DB --schema PLANNING --default --no-interactive` —
+   --database PLANNING_DB --schema PLANNING --default --no-interactive` -
    non-interactive connection configured with the PAT.
-4. `SCAI_ACCEPT_TERMS=true scai terms accept` — env flag required in a
+4. `SCAI_ACCEPT_TERMS=true scai terms accept` - env flag required in a
    non-TTY shell.
-5. `scai init sc_comparison -l SqlServer` — created project at
+5. `scai init sc_comparison -l SqlServer` - created project at
    `/tmp/sc_comparison/`.
-6. `scai code add -i snowconvert/input` — registered the 12 pristine
+6. `scai code add -i snowconvert/input` - registered the 12 pristine
    T-SQL files (1 proc + 8 tables + 3 UDTTs).
-7. `scai code convert` — succeeded. Output copied to
+7. `scai code convert` - succeeded. Output copied to
    `snowconvert/output/` (see file tree there).
 
 **Measured outcome** (from `snowconvert/output/reports/Assessment.csv`
@@ -39,7 +39,7 @@ and `Issues.csv`):
 
 The output is **not directly loadable**: a BOM prefix and the
 `!!!RESOLVE EWI!!!` literals make the file fail compilation as-is. scai
-emits these intentionally as hand-off markers for a human reviewer —
+emits these intentionally as hand-off markers for a human reviewer -
 they are not a tool bug but a workflow signal. The `make_loadable.py`
 post-processor was authored to sand off the mechanical parts (BOM,
 `USE` headers, identifier case, trailing semicolon) so the reviewer can
@@ -53,7 +53,7 @@ against the hand-crafted Snowflake translation.
 ## Historical context (pre-unblock)
 
 The section below was written before the install unblocked. Retained
-for the record — everything in it has been superseded by the run above.
+for the record - everything in it has been superseded by the run above.
 
 ## Current state (2026-04-16)
 
@@ -70,7 +70,7 @@ file and unblock the rest of the pipeline.
 
 ## Tool identification (once installed)
 
-- Tool: SnowConvert AI CLI (`scai`) — Snowflake's current migration tool
+- Tool: SnowConvert AI CLI (`scai`) - Snowflake's current migration tool
 - Version: 2.20.0 (from Homebrew tap `snowflakedb/snowconvert-ai`)
 - Distribution: Apple Silicon .pkg, installed via `brew install --cask snowconvert-ai`
 - Install location (expected): `/usr/local/snowconvertai/bin/scai`, symlinked
@@ -83,7 +83,7 @@ The legacy `snowct` CLI is deprecated. `scai` is the current AI-driven
 replacement. This lineage is relevant to the comparison itself: the
 architectural question is now "how does Snowflake's in-house AI
 translator compare to a purpose-built pipeline with stricter idiom
-pinning and a verification-harness feedback loop?" — the exact story
+pinning and a verification-harness feedback loop?" - the exact story
 the `pipeline/` directory in this repo is built to answer.
 
 ## Inputs staged (ready for scai)
@@ -110,8 +110,8 @@ snowconvert/input/types/
     BudgetLineItemTableType.sql                    912 bytes
     HierarchyNodeTableType.sql                     511 bytes
 
-snowconvert/input/functions/    (empty — mirrors original/src/Functions/)
-snowconvert/input/views/        (empty — mirrors original/src/Views/)
+snowconvert/input/functions/    (empty - mirrors original/src/Functions/)
+snowconvert/input/views/        (empty - mirrors original/src/Views/)
 ```
 
 **Pristineness guarantee** (why this matters for the comparison):
@@ -129,23 +129,23 @@ handles each specific pitfall. The patched versions live in
 
 ## Prepared artifacts
 
-1. **`snowconvert/APPENDIX.md`** — 12-row comparison table pre-filled
+1. **`snowconvert/APPENDIX.md`** - 12-row comparison table pre-filled
    with predictions per construct, plus a 3-paragraph capability-level
    synthesis. Table cells in the scai column are tagged `PREDICTED` and
    will be replaced with measured values post-run. The synthesis is
    written to stand alone even if scai never unblocks on this machine.
 
-2. **`snowconvert/make_loadable.py`** — self-contained (stdlib-only)
+2. **`snowconvert/make_loadable.py`** - self-contained (stdlib-only)
    Python script that applies *mechanical* edits (strip `USE` headers,
    fully-qualify CREATE object names, normalize identifier case, ensure
    trailing semicolon) to scai's output and writes
    `snowconvert/output_loadable.sql`. Has a `--dry-run` flag that prints
    every edit as `line N: <before> -> <after>` for reviewer audit. Design
-   constraint: no logic edits, no statement-body rewrites — a reviewer
+   constraint: no logic edits, no statement-body rewrites - a reviewer
    reading the dry-run log should be able to confirm every edit is
    cosmetic. See the module docstring for the full rule list.
 
-3. **This log (`RUN_LOG.md`)** — captures install blocker, prep status,
+3. **This log (`RUN_LOG.md`)** - captures install blocker, prep status,
    and the exact command sequence to run post-install.
 
 ## Run plan: exact commands, once `scai` is installed
@@ -172,7 +172,7 @@ scai code convert
 
 ```bash
 # 6. Copy scai's output file out to our snowconvert/output/ dir
-#    (path depends on the sc_comparison project layout — typically
+#    (path depends on the sc_comparison project layout - typically
 #     sc_comparison/output/Output/procedures/*.sql)
 cp sc_comparison/output/Output/procedures/usp_ProcessBudgetConsolidation.sql \
    /Users/shrey/Personal\ Projects/Assesment/solution_SnowConvertAI/snowconvert/output/
@@ -200,7 +200,7 @@ cp sc_comparison/output/Output/procedures/usp_ProcessBudgetConsolidation.sql \
 
 # 10. Diff scai's output against the hand-crafted version on the same
 #     fixture. Quickest path is to call both procs and compare the 11
-#     consolidated output rows — same methodology as pipeline/verify.py.
+#     consolidated output rows - same methodology as pipeline/verify.py.
 #     (A dedicated variant of verify.py for this comparison can be added
 #     later; for now, a manual two-proc-call + aggregate-diff is enough.)
 
@@ -224,7 +224,7 @@ cp sc_comparison/output/Output/procedures/usp_ProcessBudgetConsolidation.sql \
    in a Snowflake-provided Docker image or a separate macOS VM, pipe
    the output file back through git. `APPENDIX.md` is authored to stand
    alone on predictions if this happens; no edit to the structure is
-   required, only a section-head swap from "PREDICTED" to "PREDICTED —
+   required, only a section-head swap from "PREDICTED" to "PREDICTED -
    scai not run on this machine; predictions retained."
 2. **scai changes output format** between versions. Fallback:
    `make_loadable.py` has per-rule toggles (`--rules R1,R2,R3,R4`)
@@ -235,4 +235,4 @@ cp sc_comparison/output/Output/procedures/usp_ProcessBudgetConsolidation.sql \
 3. **scai produces a malformed or incomplete file**. Fallback:
    `make_loadable.py --dry-run` surfaces this as a "0 edits applied"
    report, which is the signal to re-run scai or file a bug. No silent
-   write of a broken file occurs — dry-run is the default first step.
+   write of a broken file occurs - dry-run is the default first step.

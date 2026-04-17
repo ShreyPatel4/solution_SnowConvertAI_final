@@ -1,0 +1,9 @@
+Running 4 statement(s) from test_proc5.sql
+  [1/4] USE DATABASE PLANNING_DB
+      -> ('Statement executed successfully.',)
+  [2/4] USE SCHEMA PLANNING
+      -> ('Statement executed successfully.',)
+  [3/4] USE WAREHOUSE WH_XS
+      -> ('Statement executed successfully.',)
+  [4/4] CALL PLANNING_DB.PLANNING.usp_ReconcileIntercompanyBalances(1, CURRENT_DATE(), N
+      -> ('{\n  "budget_header_id": 1,\n  "reconciliation_date": "2026-04-17",\n  "reconciliation_id": "d140ce65-2a3d-45bd-9f06-df6121a9e78f",\n  "report": {\n    "BudgetHeaderID": 1,\n    "Pairs": [],\n    "ReconciliationDate": "2026-04-17",\n    "ReconciliationID": "d140ce65-2a3d-45bd-9f06-df6121a9e78f",\n    "Statistics": {\n      "OutOfToleranceVariance": 0,\n      "Reconciled": 0,\n      "TotalPairs": 0,\n      "TotalVariance": 0,\n      "Unreconciled": 0\n    },\n    "ToleranceAmount": 0.01,\n    "TolerancePercent": 0.001\n  },\n  "success": true,\n  "total_variance_amount": 0,\n  "unreconciled_count": 0\n}',)

@@ -1,0 +1,32 @@
+[4/17/2026 8:05:55 PM] Info: ========================================
+[4/17/2026 8:05:55 PM] Info: Starting Code Add
+[4/17/2026 8:05:55 PM] Info: ========================================
+[4/17/2026 8:05:55 PM] Info: Input Path: /Users/shrey/Personal Projects/Assesment/solution_SnowConvertAI_final/snowconvert/input
+[4/17/2026 8:05:55 PM] Info: Source Dialect: SqlServer
+[4/17/2026 8:05:55 PM] Info: Overwrite: False
+[4/17/2026 8:05:55 PM] Info: Skip Split: False
+[4/17/2026 8:05:55 PM] Info: ========================================
+[4/17/2026 8:05:55 PM] Info: Adding usp_PerformFinancialClose.sql (24125 bytes) -> procedures/usp_PerformFinancialClose.sql
+[4/17/2026 8:05:55 PM] Info: Adding usp_ReconcileIntercompanyBalances.sql (17100 bytes) -> procedures/usp_ReconcileIntercompanyBalances.sql
+[4/17/2026 8:05:55 PM] Info: Adding usp_GenerateRollingForecast.sql (19640 bytes) -> procedures/usp_GenerateRollingForecast.sql
+[4/17/2026 8:05:55 PM] Info: Adding usp_BulkImportBudgetData.sql (23166 bytes) -> procedures/usp_BulkImportBudgetData.sql
+[4/17/2026 8:05:55 PM] Info: Adding usp_ProcessBudgetConsolidation.sql (22209 bytes) -> procedures/usp_ProcessBudgetConsolidation.sql
+[4/17/2026 8:05:55 PM] Info: Adding AllocationRule.sql (2609 bytes) -> tables/AllocationRule.sql
+[4/17/2026 8:05:55 PM] Info: Adding FiscalPeriod.sql (1773 bytes) -> tables/FiscalPeriod.sql
+[4/17/2026 8:05:55 PM] Info: Adding ConsolidationJournalLine.sql (2441 bytes) -> tables/ConsolidationJournalLine.sql
+[4/17/2026 8:05:55 PM] Info: Adding BudgetLineItem.sql (3403 bytes) -> tables/BudgetLineItem.sql
+[4/17/2026 8:05:55 PM] Info: Adding GLAccount.sql (1991 bytes) -> tables/GLAccount.sql
+[4/17/2026 8:05:55 PM] Info: Adding BudgetHeader.sql (2435 bytes) -> tables/BudgetHeader.sql
+[4/17/2026 8:05:55 PM] Info: Adding CostCenter.sql (1686 bytes) -> tables/CostCenter.sql
+[4/17/2026 8:05:55 PM] Info: Adding ConsolidationJournal.sql (2734 bytes) -> tables/ConsolidationJournal.sql
+[4/17/2026 8:05:55 PM] Info: Adding HierarchyNodeTableType.sql (511 bytes) -> types/HierarchyNodeTableType.sql
+[4/17/2026 8:05:55 PM] Info: Adding BudgetLineItemTableType.sql (912 bytes) -> types/BudgetLineItemTableType.sql
+[4/17/2026 8:05:55 PM] Info: Adding AllocationResultTableType.sql (677 bytes) -> types/AllocationResultTableType.sql
+[4/17/2026 8:06:16 PM] Info: ========================================
+[4/17/2026 8:06:16 PM] Info: Code Add Completed Successfully
+[4/17/2026 8:06:16 PM] Info: Total Files: 16
+[4/17/2026 8:06:16 PM] Info: Successful: 16
+[4/17/2026 8:06:16 PM] Info: Failed: 0
+[4/17/2026 8:06:16 PM] Info: Total Size: 127412 bytes
+[4/17/2026 8:06:16 PM] Info: Execution Time: 00:00:21
+[4/17/2026 8:06:16 PM] Info: ========================================

@@ -1,0 +1,398 @@
+[4/17/2026 4:06:31 PM] Info: SourceLanguage set to Transact based on the appsettings configuration.
+[4/17/2026 4:06:31 PM] Info: Conversion Engine process being executed with the following parameters:
+[4/17/2026 4:06:31 PM] Info: 	AccessLevel : General Availability
+[4/17/2026 4:06:31 PM] Info: 	AppType : cli
+[4/17/2026 4:06:31 PM] Info: 	AppVersion : 2.20.0
+[4/17/2026 4:06:31 PM] Info: 	ArtifactsPath : /private/tmp/sc_full/artifacts
+[4/17/2026 4:06:31 PM] Info: 	AssessmentDirectory : /private/tmp/sc_full/.scai/.snowconvert/.mobilize/AssessmentModel
+[4/17/2026 4:06:31 PM] Info: 	CommentIfMissingDependencies : False
+[4/17/2026 4:06:31 PM] Info: 	CommonEF : /private/tmp/sc_full/.scai/.snowconvert/.mobilize/CommonEF
+[4/17/2026 4:06:31 PM] Info: 	CustomSchema : 
+[4/17/2026 4:06:31 PM] Info: 	DisableUseDatabaseGeneration : False
+[4/17/2026 4:06:31 PM] Info: 	Encoding : 65001
+[4/17/2026 4:06:31 PM] Info: 	IsInputDirectory : True
+[4/17/2026 4:06:31 PM] Info: 	PLTargetLanguage : SnowScript
+[4/17/2026 4:06:31 PM] Info: 	ProjectContextPath : /private/tmp/sc_full/.scai/conversion-context
+[4/17/2026 4:06:31 PM] Info: 	ProjectPath : /private/tmp/sc_full
+[4/17/2026 4:06:31 PM] Info: 	SnowflakeAccountId : prc57893.us-east-1
+[4/17/2026 4:06:31 PM] Info: 	SnowflakeUser : SHREYP412
+[4/17/2026 4:06:31 PM] Info: 	SourceLanguage : SqlServer
+[4/17/2026 4:06:31 PM] Info: 	TargetLag : 1 day
+[4/17/2026 4:06:31 PM] Info: 	UseExistingNameQualification : False
+[4/17/2026 4:06:31 PM] Info: 	Warehouse : UPDATE_DUMMY_WAREHOUSE
+[4/17/2026 4:06:31 PM] Info: 	WorkingDirectory : /private/tmp/sc_full/snowflake
+[4/17/2026 4:06:31 PM] Info: Starting to analyze the input path '/private/tmp/sc_full/source'...
+[4/17/2026 4:06:35 PM] Info: EFProcess 639120387957236370 started
+[4/17/2026 4:06:35 PM] Debug: TaskParam TaskProvider = Mobilize.Snow.Common.SnowConvertTaskProvider
+[4/17/2026 4:06:35 PM] Debug: TaskParam ConversionBeginTask.Input = /private/tmp/sc_full/source/input.wsp
+[4/17/2026 4:06:35 PM] Debug: TaskParam workingSet = Value is not created.
+[4/17/2026 4:06:35 PM] Debug: TaskParam ConversionBeginTask.ItemMedatada = Artinsoft.Common.Store.ItemMetadata
+[4/17/2026 4:06:35 PM] Debug: TaskParam ConversionBeginTask.Enabled = True
+[4/17/2026 4:06:35 PM] Debug: TaskParam Repository = Value is not created.
+[4/17/2026 4:06:35 PM] Debug: TaskParam RepositoryDirectory = /private/tmp/sc_full/.scai/.snowconvert/.mobilize/CommonEF
+[4/17/2026 4:06:36 PM] Info: Found 27 Sql files with a total size of 0.12MB
+[4/17/2026 4:06:36 PM] Info: Starting the parsing process of 27 files with 0.12MB of code, this might take a while...
+[4/17/2026 4:06:36 PM] Info: Step 1/8 - Loading Code: STARTED
+[4/17/2026 4:06:36 PM] Error: There is 1 parsing error in the file /private/tmp/sc_full/source/database_unspecified/dbo/unknown_type/allocationrule.sql
+[4/17/2026 4:06:36 PM] Error: allocationrule.sql(1, 0): ** SSC-EWI-0001 - UNRECOGNIZED TOKEN ON LINE '1' COLUMN '0' OF THE SOURCE CODE STARTING AT 'CREATE'. EXPECTED 'Statement' GRAMMAR. LAST MATCHING TOKEN WAS 'CREATE' ON LINE '1' COLUMN '0'. ** 
+[4/17/2026 4:06:36 PM] Error: There are 2 parsing errors in the file /private/tmp/sc_full/source/database_unspecified/dbo/unknown_type/budgetheader.sql
+[4/17/2026 4:06:36 PM] Error: budgetheader.sql(1, 0): ** SSC-EWI-0001 - UNRECOGNIZED TOKEN ON LINE '1' COLUMN '0' OF THE SOURCE CODE STARTING AT 'CREATE'. EXPECTED 'Statement' GRAMMAR. LAST MATCHING TOKEN WAS 'CREATE' ON LINE '1' COLUMN '0'. ** 
+[4/17/2026 4:06:36 PM] Error: budgetheader.sql(3, 0): ** SSC-EWI-0001 - UNRECOGNIZED TOKEN ON LINE '3' COLUMN '0' OF THE SOURCE CODE STARTING AT 'CREATE'. EXPECTED 'Statement' GRAMMAR. LAST MATCHING TOKEN WAS 'CREATE' ON LINE '3' COLUMN '0'. ** 
+[4/17/2026 4:06:36 PM] Info: Step 1/8 - Loading Code: COMPLETED
+[4/17/2026 4:06:36 PM] Debug: TaskParam TaskProvider = Mobilize.Snow.Common.SnowConvertTaskProvider
+[4/17/2026 4:06:36 PM] Debug: TaskParam SymbolTableFillingTask.Input = /private/tmp/sc_full/source/input.wsp
+[4/17/2026 4:06:36 PM] Debug: TaskParam workingSet = Artinsoft.Common.Store.RepositoryWorkingSet`2[System.String,Artinsoft.Common.Store.IItemContainer]
+[4/17/2026 4:06:36 PM] Debug: TaskParam SymbolTableFillingTask.ItemMedatada = Artinsoft.Common.Store.ItemMetadata
+[4/17/2026 4:06:36 PM] Debug: TaskParam SymbolTableFillingTask.Enabled = True
+[4/17/2026 4:06:36 PM] Debug: TaskParam Repository = Artinsoft.Common.Store.Repository
+[4/17/2026 4:06:36 PM] Debug: TaskParam RepositoryDirectory = /private/tmp/sc_full/.scai/.snowconvert/.mobilize/CommonEF
+[4/17/2026 4:06:36 PM] Info: Step 2/8 - Semantic Analysis of Tables: STARTED
+[4/17/2026 4:06:36 PM] Error: Error when loading symbols from the file /private/tmp/sc_full/source/database_unspecified/planning/table/consolidationjournal.sql, Error message: Collection was modified; enumeration operation may not execute.
+[4/17/2026 4:06:36 PM] Debug: Exception for previous error: Collection was modified; enumeration operation may not execute.
+   at System.Collections.Generic.Dictionary`2.Enumerator.MoveNext()
+   at Artinsoft.Common.Serialization.SerializerContext.Write[TKey,TValue](IDictionary`2 map, Action`2 writeKey, Action`2 writeValue, Dictionary`2 keysIndexes)
+   at Mobilize.Common.SymbolTable.Scope.ScopeItemSerializer`1.SerializeItem(T node, SerializerContext ctx)
+   at Artinsoft.Common.Store.RepositoryItem.Serializer`1.Serialize(T node, SerializerContext ctx)
+   at Artinsoft.Common.Serialization.SerializerDelegate`2.Write(Object node, SerializerContext ctx)
+   at Artinsoft.Common.Serialization.SerializerContext.Write[T](T node)
+   at Artinsoft.Common.Serialization.Serializer.Serialize(Object obj, SerializerContext ctx, Action`1 init, Action`1 done)
+   at Artinsoft.Common.Serialization.Serializer.Serialize(Object obj, Stream output, CancellationToken cancellationToken, Action`1 init, Action`1 done)
+   at Artinsoft.Common.Store.SqlStorage`1.Serialize(IRepositoryItem item, File file, Int64& offset, CancellationToken cancellationToken, UInt32& length)
+   at Mobilize.Common.Store.SqliteStorage.StoreItem(UInt32 itemNameRowId, SqliteItemVersion itemVersion, IRepositoryItem item, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Mobilize.Common.Store.SqliteItemVersion.StoreItem(IRepositoryItem item, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Artinsoft.Common.Store.ItemVersion.Store(IRepositoryItem item, IRepositoryItem[] parts, Repository repo, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Artinsoft.Common.Store.ItemVersion.Store(Repository repo, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Artinsoft.Common.Store.Repository.Store(IRepositoryItem item, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Mobilize.Common.SymbolTable.Scope.Close(ExceptionHandler exceptionHandler, CancellationToken cancellationToken, Boolean ignoreChanges, Boolean closeNestedScopes)
+   at Mobilize.Common.SymbolTable.ScopeLoader.CloseScope(ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Mobilize.AnsiSql.SymbolTable.AnsiScopeLoader.CloseScope(Boolean serialize, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Mobilize.AnsiSql.Loader.FromTableLoader`2.ExitScope(TTableFactor node, TContext ctx)
+   at Mobilize.AnsiSql.Loader.BaseScopeLoader`2.ExitNode(TScope node, TContext ctx)
+   at Artinsoft.Common.Tools.Composition.ExtensibleAstDelegate`2.Artinsoft.Common.Visitor.IVisitorDelegate<Artinsoft.Common.AST.IAst,TContext>.ExitNode(IAst node, TContext ctx, UInt32 hLocalCtx)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.EndVisit(TVisitable node, DelegateData& nodeDelegate)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.AstVisitor`2.ChildrenLoop(IAst node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.VisitChildren(DelegateData& nodeDelegate, TVisitable node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.AstVisitor`2.ChildrenLoop(IAst node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.VisitChildren(DelegateData& nodeDelegate, TVisitable node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.AstVisitor`2.ChildrenLoop(IAst node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.VisitChildren(DelegateData& nodeDelegate, TVisitable node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.AstVisitor`2.ChildrenLoop(IAst node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.VisitChildren(DelegateData& nodeDelegate, TVisitable node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.AstVisitor`2.ChildrenLoop(IAst node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.VisitChildren(DelegateData& nodeDelegate, TVisitable node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.AstVisitor`2.ChildrenLoop(IAst node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.VisitChildren(DelegateData& nodeDelegate, TVisitable node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.AstVisitor`2.ChildrenLoop(IAst node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.VisitChildren(DelegateData& nodeDelegate, TVisitable node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.AstVisitor`2.ChildrenLoop(IAst node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.VisitChildren(DelegateData& nodeDelegate, TVisitable node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.Searcher`3.Execute[T](T ast, TVisitor visitor)
+   at Artinsoft.Common.Tools.Searcher`3.Execute[T](T ast, Traversal traversal, TState state)
+   at Artinsoft.Common.Tools.Transform.Collector`1.Execute(AstSourceBuilder itemInstance, TContext context)
+   at Mobilize.Snow.Common.Tasks.SnowConvertCollector`1.Execute(AstSource source, AstSourceBuilder& builder, Int32 lineOffset, Int32 columnOffset, Int32 cellId)
+   at Mobilize.Snow.Common.Tasks.SemanticAnalyzer`1.Execute(AstSource source, AstSourceBuilder& builder, Int32 lineOffset, Int32 columnOffset, Int32 cellId)
+   at Mobilize.Snow.Common.Tasks.SnowConvertTask.ExecuteWithBuilder(AstSource source, AstSourceBuilder& builder, Int32 lineOffset, Int32 columnOffset, Int32 cellId)
+[4/17/2026 4:06:37 PM] Info: Step 2/8 - Semantic Analysis of Tables: COMPLETED
+[4/17/2026 4:06:37 PM] Debug: TaskParam TaskProvider = Mobilize.Snow.Common.SnowConvertTaskProvider
+[4/17/2026 4:06:37 PM] Debug: TaskParam SymbolTableFillingSecondTask.Input = /private/tmp/sc_full/source/input.wsp
+[4/17/2026 4:06:37 PM] Debug: TaskParam workingSet = Artinsoft.Common.Store.RepositoryWorkingSet`2[System.String,Artinsoft.Common.Store.IItemContainer]
+[4/17/2026 4:06:37 PM] Debug: TaskParam SymbolTableFillingSecondTask.ItemMedatada = Artinsoft.Common.Store.ItemMetadata
+[4/17/2026 4:06:37 PM] Debug: TaskParam SymbolTableFillingSecondTask.Enabled = True
+[4/17/2026 4:06:37 PM] Debug: TaskParam Repository = Artinsoft.Common.Store.Repository
+[4/17/2026 4:06:37 PM] Debug: TaskParam RepositoryDirectory = /private/tmp/sc_full/.scai/.snowconvert/.mobilize/CommonEF
+[4/17/2026 4:06:37 PM] Info: Step 3/8 - Semantic Analysis of Top Level Objects: STARTED
+[4/17/2026 4:06:37 PM] Error: Error when loading symbols from the file /private/tmp/sc_full/source/database_unspecified/planning/table/consolidationjournal.sql, Error message: Collection was modified; enumeration operation may not execute.
+[4/17/2026 4:06:37 PM] Debug: Exception for previous error: Collection was modified; enumeration operation may not execute.
+   at System.Collections.Generic.Dictionary`2.Enumerator.MoveNext()
+   at Artinsoft.Common.Serialization.SerializerContext.Write[TKey,TValue](IDictionary`2 map, Action`2 writeKey, Action`2 writeValue, Dictionary`2 keysIndexes)
+   at Mobilize.Common.SymbolTable.Scope.ScopeItemSerializer`1.SerializeItem(T node, SerializerContext ctx)
+   at Artinsoft.Common.Store.RepositoryItem.Serializer`1.Serialize(T node, SerializerContext ctx)
+   at Mobilize.Common.SymbolTable.SymbolTable.TheRootScope.Serializer.Serialize(TheRootScope node, SerializerContext ctx)
+   at Artinsoft.Common.Serialization.SerializerDelegate`2.Write(Object node, SerializerContext ctx)
+   at Artinsoft.Common.Serialization.SerializerContext.Write[T](T node)
+   at Artinsoft.Common.Serialization.Serializer.Serialize(Object obj, SerializerContext ctx, Action`1 init, Action`1 done)
+   at Artinsoft.Common.Serialization.Serializer.Serialize(Object obj, Stream output, CancellationToken cancellationToken, Action`1 init, Action`1 done)
+   at Artinsoft.Common.Store.SqlStorage`1.Serialize(IRepositoryItem item, File file, Int64& offset, CancellationToken cancellationToken, UInt32& length)
+   at Mobilize.Common.Store.SqliteStorage.StoreItem(UInt32 itemNameRowId, SqliteItemVersion itemVersion, IRepositoryItem item, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Mobilize.Common.Store.SqliteItemVersion.StoreItem(IRepositoryItem item, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Artinsoft.Common.Store.ItemVersion.Store(IRepositoryItem item, IRepositoryItem[] parts, Repository repo, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Artinsoft.Common.Store.ItemVersion.Store(Repository repo, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Artinsoft.Common.Store.Repository.Store(IRepositoryItem item, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Mobilize.Common.SymbolTable.Scope.Close(ExceptionHandler exceptionHandler, CancellationToken cancellationToken, Boolean ignoreChanges, Boolean closeNestedScopes)
+   at Mobilize.Common.SymbolTable.ScopeLoader.CloseScope(ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Mobilize.AnsiSql.SymbolTable.AnsiScopeLoader.CloseScope(Boolean serialize, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Mobilize.AnsiSql.Loader.BaseScopeLoader`2.ExitScope(TScope node, TContext ctx)
+   at Mobilize.AnsiSql.Loader.BaseScopeLoader`2.ExitNode(TScope node, TContext ctx)
+   at Artinsoft.Common.Tools.Composition.ExtensibleAstDelegate`2.Artinsoft.Common.Visitor.IVisitorDelegate<Artinsoft.Common.AST.IAst,TContext>.ExitNode(IAst node, TContext ctx, UInt32 hLocalCtx)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.EndVisit(TVisitable node, DelegateData& nodeDelegate)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.Searcher`3.Execute[T](T ast, TVisitor visitor)
+   at Artinsoft.Common.Tools.Searcher`3.Execute[T](T ast, Traversal traversal, TState state)
+   at Artinsoft.Common.Tools.Transform.Collector`1.Execute(AstSourceBuilder itemInstance, TContext context)
+   at Mobilize.Snow.Common.Tasks.SnowConvertCollector`1.Execute(AstSource source, AstSourceBuilder& builder, Int32 lineOffset, Int32 columnOffset, Int32 cellId)
+   at Mobilize.Snow.Common.Tasks.SemanticAnalyzer`1.Execute(AstSource source, AstSourceBuilder& builder, Int32 lineOffset, Int32 columnOffset, Int32 cellId)
+   at Mobilize.Snow.Common.Tasks.SnowConvertTask.ExecuteWithBuilder(AstSource source, AstSourceBuilder& builder, Int32 lineOffset, Int32 columnOffset, Int32 cellId)
+[4/17/2026 4:06:37 PM] Info: Step 3/8 - Semantic Analysis of Top Level Objects: STORING
+[4/17/2026 4:06:37 PM] Info: Step 3/8 - Semantic Analysis of Top Level Objects: STORED
+[4/17/2026 4:06:37 PM] Info: Step 3/8 - Semantic Analysis of Top Level Objects: COMPLETED
+[4/17/2026 4:06:37 PM] Debug: TaskParam TaskProvider = Mobilize.Snow.Common.SnowConvertTaskProvider
+[4/17/2026 4:06:37 PM] Debug: TaskParam PreProcessTask.Input = /private/tmp/sc_full/source/input.wsp
+[4/17/2026 4:06:37 PM] Debug: TaskParam workingSet = Artinsoft.Common.Store.RepositoryWorkingSet`2[System.String,Artinsoft.Common.Store.IItemContainer]
+[4/17/2026 4:06:37 PM] Debug: TaskParam PreProcessTask.ItemMedatada = Artinsoft.Common.Store.ItemMetadata
+[4/17/2026 4:06:37 PM] Debug: TaskParam PreProcessTask.Enabled = True
+[4/17/2026 4:06:37 PM] Debug: TaskParam Repository = Artinsoft.Common.Store.Repository
+[4/17/2026 4:06:37 PM] Debug: TaskParam RepositoryDirectory = /private/tmp/sc_full/.scai/.snowconvert/.mobilize/CommonEF
+[4/17/2026 4:06:37 PM] Info: Step 4/8 - Pre-Processing: STARTED
+[4/17/2026 4:06:38 PM] Info: Step 4/8 - Pre-Processing: COMPLETED
+[4/17/2026 4:06:38 PM] Debug: TaskParam Lineage.Input = /private/tmp/sc_full/source/input.wsp
+[4/17/2026 4:06:38 PM] Debug: TaskParam workingSet = Artinsoft.Common.Store.RepositoryWorkingSet`2[System.String,Artinsoft.Common.Store.IItemContainer]
+[4/17/2026 4:06:38 PM] Debug: TaskParam Lineage.ItemMedatada = Artinsoft.Common.Store.ItemMetadata
+[4/17/2026 4:06:38 PM] Debug: TaskParam Lineage.Enabled = True
+[4/17/2026 4:06:38 PM] Debug: TaskParam Repository = Artinsoft.Common.Store.Repository
+[4/17/2026 4:06:38 PM] Debug: TaskParam RepositoryDirectory = /private/tmp/sc_full/.scai/.snowconvert/.mobilize/CommonEF
+[4/17/2026 4:06:38 PM] Info: Step 5/8 - Data lineage analysis: STARTED
+[4/17/2026 4:06:38 PM] Info: Step 5/8 - Data lineage analysis: COMPLETED
+[4/17/2026 4:06:38 PM] Debug: TaskParam TaskProvider = Mobilize.Snow.Common.SnowConvertTaskProvider
+[4/17/2026 4:06:38 PM] Debug: TaskParam PreConversionAssessmentTask.Input = /private/tmp/sc_full/source/input.wsp
+[4/17/2026 4:06:38 PM] Debug: TaskParam workingSet = Artinsoft.Common.Store.RepositoryWorkingSet`2[System.String,Artinsoft.Common.Store.IItemContainer]
+[4/17/2026 4:06:38 PM] Debug: TaskParam PreConversionAssessmentTask.ItemMedatada = Artinsoft.Common.Store.ItemMetadata
+[4/17/2026 4:06:38 PM] Debug: TaskParam PreConversionAssessmentTask.Enabled = True
+[4/17/2026 4:06:38 PM] Debug: TaskParam Repository = Artinsoft.Common.Store.Repository
+[4/17/2026 4:06:38 PM] Debug: TaskParam RepositoryDirectory = /private/tmp/sc_full/.scai/.snowconvert/.mobilize/CommonEF
+[4/17/2026 4:06:38 PM] Info: Step 6/8 - Pre-Conversion Assessment: STARTED
+[4/17/2026 4:06:38 PM] Info: Step 6/8 - Pre-Conversion Assessment: COMPLETED
+[4/17/2026 4:06:38 PM] Debug: TaskParam TaskProvider = Mobilize.Snow.Common.SnowConvertTaskProvider
+[4/17/2026 4:06:38 PM] Debug: TaskParam TransformationsTask.Input = /private/tmp/sc_full/source/input.wsp
+[4/17/2026 4:06:38 PM] Debug: TaskParam workingSet = Artinsoft.Common.Store.RepositoryWorkingSet`2[System.String,Artinsoft.Common.Store.IItemContainer]
+[4/17/2026 4:06:38 PM] Debug: TaskParam TransformationsTask.ItemMedatada = Artinsoft.Common.Store.ItemMetadata
+[4/17/2026 4:06:38 PM] Debug: TaskParam TransformationsTask.Enabled = True
+[4/17/2026 4:06:38 PM] Debug: TaskParam Repository = Artinsoft.Common.Store.Repository
+[4/17/2026 4:06:38 PM] Debug: TaskParam RepositoryDirectory = /private/tmp/sc_full/.scai/.snowconvert/.mobilize/CommonEF
+[4/17/2026 4:06:38 PM] Info: Step 7/8 - Conversion Execution: STARTED
+[4/17/2026 4:06:38 PM] Info: Start transforming file consolidationjournal.sql
+[4/17/2026 4:06:38 PM] Info: Start transforming file consolidationjournalline.sql
+[4/17/2026 4:06:38 PM] Info: Start transforming file budgetheader.sql
+[4/17/2026 4:06:38 PM] Info: Start transforming file usp_generaterollingforecast.sql
+[4/17/2026 4:06:38 PM] Info: Start transforming file ix_costcenter_hierarchy.sql
+[4/17/2026 4:06:38 PM] Info: Start transforming file ix_consolidationjournal_rowguid.sql
+[4/17/2026 4:06:38 PM] Info: Start transforming file hierarchynodetabletype.sql
+[4/17/2026 4:06:38 PM] Info: Start transforming file consolidationjournalline.sql
+[4/17/2026 4:06:38 PM] Info: Start transforming file ix_fiscalperiod_openperiods.sql
+[4/17/2026 4:06:38 PM] Info: Start transforming file allocationresulttabletype.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file ix_fiscalperiod_openperiods.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file hierarchynodetabletype.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file consolidationjournalline.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file ix_consolidationjournal_rowguid.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file allocationresulttabletype.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file budgetheader.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file ix_costcenter_hierarchy.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file consolidationjournalline.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file consolidationjournal.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file ix_budgetlineitem_allocated.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file allocationrule.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file fiscalperiod.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file ix_budgetlineitem_allocated.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file uq_budgetlineitem_naturalkey.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file uq_budgetlineitem_naturalkey.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file allocationrule.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file allocationrule.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file fiscalperiod.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file budgetheader.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file budgetlineitem.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file allocationrule.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file budgetlineitem.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file glaccount.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file usp_reconcileintercompanybalances.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file usp_performfinancialclose.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file usp_processbudgetconsolidation.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file budgetheader.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file budgetlineitemtabletype.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file glaccount.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file budgetlineitemtabletype.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file ix_fiscalperiod_dates.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file ix_fiscalperiod_dates.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file costcenter.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file usp_bulkimportbudgetdata.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file costcenter.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file glaccount.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file glaccount.sql
+[4/17/2026 4:06:39 PM] Info: Start transforming file budgetlineitem.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file budgetlineitem.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file usp_reconcileintercompanybalances.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file usp_processbudgetconsolidation.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file usp_generaterollingforecast.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file usp_bulkimportbudgetdata.sql
+[4/17/2026 4:06:39 PM] Info: Transformed file usp_performfinancialclose.sql
+[4/17/2026 4:06:39 PM] Info: POWER BI: Starting repointing.
+[4/17/2026 4:06:39 PM] Info: POWER BI: Finishing repointing.
+[4/17/2026 4:06:39 PM] Info: === Agent Job Registry Summary ===
+Jobs: 0
+Tracked variables: 33
+SSIS packages referenced: 0
+
+
+[4/17/2026 4:06:39 PM] Info: Step 7/8 - Conversion Execution: COMPLETED
+[4/17/2026 4:06:39 PM] Debug: TaskParam TargetSymbolPartialFillingTask.Input = /private/tmp/sc_full/source/input.wsp
+[4/17/2026 4:06:39 PM] Debug: TaskParam workingSet = Artinsoft.Common.Store.RepositoryWorkingSet`2[System.String,Artinsoft.Common.Store.IItemContainer]
+[4/17/2026 4:06:39 PM] Debug: TaskParam TargetSymbolPartialFillingTask.ItemMedatada = Artinsoft.Common.Store.ItemMetadata
+[4/17/2026 4:06:39 PM] Debug: TaskParam TargetSymbolPartialFillingTask.Enabled = True
+[4/17/2026 4:06:39 PM] Debug: TaskParam Repository = Artinsoft.Common.Store.Repository
+[4/17/2026 4:06:39 PM] Debug: TaskParam RepositoryDirectory = /private/tmp/sc_full/.scai/.snowconvert/.mobilize/CommonEF
+[4/17/2026 4:06:39 PM] Info: Step 2/8 - Semantic Analysis of Tables: STARTED
+[4/17/2026 4:06:39 PM] Info: Target symbol table partial filling (Tables): STARTED
+[4/17/2026 4:06:39 PM] Error: Error when loading symbols from the file /private/tmp/sc_full/source/database_unspecified/planning/table/consolidationjournalline.sql, Error message: Collection was modified; enumeration operation may not execute.
+[4/17/2026 4:06:39 PM] Debug: Exception for previous error: Collection was modified; enumeration operation may not execute.
+   at System.Collections.Generic.Dictionary`2.Enumerator.MoveNext()
+   at Artinsoft.Common.Serialization.SerializerContext.Write[TKey,TValue](IDictionary`2 map, Action`2 writeKey, Action`2 writeValue, Dictionary`2 keysIndexes)
+   at Mobilize.Common.SymbolTable.Scope.ScopeItemSerializer`1.SerializeItem(T node, SerializerContext ctx)
+   at Artinsoft.Common.Store.RepositoryItem.Serializer`1.Serialize(T node, SerializerContext ctx)
+   at Artinsoft.Common.Serialization.SerializerDelegate`2.Write(Object node, SerializerContext ctx)
+   at Artinsoft.Common.Serialization.SerializerContext.Write[T](T node)
+   at Artinsoft.Common.Serialization.Serializer.Serialize(Object obj, SerializerContext ctx, Action`1 init, Action`1 done)
+   at Artinsoft.Common.Serialization.Serializer.Serialize(Object obj, Stream output, CancellationToken cancellationToken, Action`1 init, Action`1 done)
+   at Artinsoft.Common.Store.SqlStorage`1.Serialize(IRepositoryItem item, File file, Int64& offset, CancellationToken cancellationToken, UInt32& length)
+   at Mobilize.Common.Store.SqliteStorage.StoreItem(UInt32 itemNameRowId, SqliteItemVersion itemVersion, IRepositoryItem item, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Mobilize.Common.Store.SqliteItemVersion.StoreItem(IRepositoryItem item, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Artinsoft.Common.Store.ItemVersion.Store(IRepositoryItem item, IRepositoryItem[] parts, Repository repo, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Artinsoft.Common.Store.ItemVersion.Store(Repository repo, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Artinsoft.Common.Store.Repository.Store(IRepositoryItem item, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Mobilize.Common.SymbolTable.Scope.Close(ExceptionHandler exceptionHandler, CancellationToken cancellationToken, Boolean ignoreChanges, Boolean closeNestedScopes)
+   at Mobilize.Common.SymbolTable.ScopeLoader.CloseScope(ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Mobilize.AnsiSql.SymbolTable.AnsiScopeLoader.CloseScope(Boolean serialize, ExceptionHandler exceptionHandler, CancellationToken cancellationToken)
+   at Mobilize.AnsiSql.Loader.FromTableLoader`2.ExitScope(TTableFactor node, TContext ctx)
+   at Mobilize.AnsiSql.Loader.BaseScopeLoader`2.ExitNode(TScope node, TContext ctx)
+   at Artinsoft.Common.Tools.Composition.ExtensibleAstDelegate`2.Artinsoft.Common.Visitor.IVisitorDelegate<Artinsoft.Common.AST.IAst,TContext>.ExitNode(IAst node, TContext ctx, UInt32 hLocalCtx)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.EndVisit(TVisitable node, DelegateData& nodeDelegate)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.AstVisitor`2.ChildrenLoop(IAst node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.VisitChildren(DelegateData& nodeDelegate, TVisitable node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.AstVisitor`2.ChildrenLoop(IAst node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.VisitChildren(DelegateData& nodeDelegate, TVisitable node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.AstVisitor`2.ChildrenLoop(IAst node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.VisitChildren(DelegateData& nodeDelegate, TVisitable node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.AstVisitor`2.ChildrenLoop(IAst node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.VisitChildren(DelegateData& nodeDelegate, TVisitable node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.AstVisitor`2.ChildrenLoop(IAst node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.VisitChildren(DelegateData& nodeDelegate, TVisitable node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.AstVisitor`2.ChildrenLoop(IAst node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.VisitChildren(DelegateData& nodeDelegate, TVisitable node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.AstVisitor`2.ChildrenLoop(IAst node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.VisitChildren(DelegateData& nodeDelegate, TVisitable node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.AstVisitor`2.ChildrenLoop(IAst node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.VisitChildren(DelegateData& nodeDelegate, TVisitable node)
+   at Artinsoft.Common.Visitor.DelegatorVisitor`4.Visit(TVisitable node)
+   at Artinsoft.Common.AST.Compound.Accept(IVisitor`1 visitor)
+   at Artinsoft.Common.Tools.Searcher`3.Execute[T](T ast, TVisitor visitor)
+   at Artinsoft.Common.Tools.Searcher`3.Execute[T](T ast, Traversal traversal, TState state)
+   at Artinsoft.Common.Tools.Transform.Collector`1.Execute(AstSourceBuilder itemInstance, TContext context)
+   at Mobilize.Snow.Common.Tasks.SnowConvertCollector`1.Execute(AstSource source, AstSourceBuilder& builder, Int32 lineOffset, Int32 columnOffset, Int32 cellId)
+   at Mobilize.Snow.Common.Tasks.SemanticAnalyzer`1.Execute(AstSource source, AstSourceBuilder& builder, Int32 lineOffset, Int32 columnOffset, Int32 cellId)
+   at Mobilize.Snow.Common.Tasks.SnowConvertTask.ExecuteWithBuilder(AstSource source, AstSourceBuilder& builder, Int32 lineOffset, Int32 columnOffset, Int32 cellId)
+[4/17/2026 4:06:40 PM] Info: Step 2/8 - Semantic Analysis of Tables: COMPLETED
+[4/17/2026 4:06:40 PM] Info: Target symbol table partial filling (Tables): COMPLETED
+[4/17/2026 4:06:40 PM] Debug: TaskParam TargetSymbolFullFillingTask.Input = /private/tmp/sc_full/source/input.wsp
+[4/17/2026 4:06:40 PM] Debug: TaskParam workingSet = Artinsoft.Common.Store.RepositoryWorkingSet`2[System.String,Artinsoft.Common.Store.IItemContainer]
+[4/17/2026 4:06:40 PM] Debug: TaskParam TargetSymbolFullFillingTask.ItemMedatada = Artinsoft.Common.Store.ItemMetadata
+[4/17/2026 4:06:40 PM] Debug: TaskParam TargetSymbolFullFillingTask.Enabled = True
+[4/17/2026 4:06:40 PM] Debug: TaskParam Repository = Artinsoft.Common.Store.Repository
+[4/17/2026 4:06:40 PM] Debug: TaskParam RepositoryDirectory = /private/tmp/sc_full/.scai/.snowconvert/.mobilize/CommonEF
+[4/17/2026 4:06:40 PM] Info: Step 3/8 - Semantic Analysis of Top Level Objects: STARTED
+[4/17/2026 4:06:40 PM] Info: Target symbol table full filling (Views and top-level objects): STARTED
+[4/17/2026 4:06:40 PM] Info: Step 3/8 - Semantic Analysis of Top Level Objects: STORING
+[4/17/2026 4:06:40 PM] Error: Error after executing the sender task. Error message: One or more errors occurred. (Object reference not set to an instance of an object.)
+[4/17/2026 4:06:40 PM] Debug: Aggregated exception for previous error: Object reference not set to an instance of an object.
+   at Mobilize.Common.SymbolTable.Scope.Artinsoft.Common.Store.ICompositeRepositoryItem.GetEnumerator()
+   at Artinsoft.Common.Store.Repository.ToItemVersionEnumerable(IEnumerator`1 partEnumerator)+MoveNext()
+   at System.Collections.Concurrent.Partitioner.DynamicPartitionerForIEnumerable`1.InternalPartitionEnumerable.GrabChunk_Buffered(KeyValuePair`2[] destArray, Int32 requestedChunkSize, Int32& actualNumElementsGrabbed)
+   at System.Collections.Concurrent.Partitioner.DynamicPartitionEnumerator_Abstract`2.MoveNext()
+   at System.Threading.Tasks.Parallel.<>c__DisplayClass43_0`2.<PartitionerForEachWorker>b__1(IEnumerator& partitionState, Int64 timeout, Boolean& replicationDelegateYieldedBeforeCompletion)
+--- End of stack trace from previous location ---
+   at System.Threading.Tasks.Parallel.<>c__DisplayClass43_0`2.<PartitionerForEachWorker>b__1(IEnumerator& partitionState, Int64 timeout, Boolean& replicationDelegateYieldedBeforeCompletion)
+   at System.Threading.Tasks.TaskReplicator.Replica.Execute()
+[4/17/2026 4:06:40 PM] Info: Target symbol table full filling (Views and top-level objects): COMPLETED
+[4/17/2026 4:06:40 PM] Debug: TaskParam SnowScript = True
+[4/17/2026 4:06:40 PM] Debug: TaskParam reportPath = /private/tmp/sc_full/reports/SnowConvert
+[4/17/2026 4:06:40 PM] Debug: TaskParam totalProcessedLOC = 0
+[4/17/2026 4:06:40 PM] Debug: TaskParam inputPath = /private/tmp/sc_full/source
+[4/17/2026 4:06:40 PM] Debug: TaskParam outputPath = /private/tmp/sc_full/.scai/.snowconvert
+[4/17/2026 4:06:40 PM] Debug: TaskParam SessionTimestamp = 20260417.160631
+[4/17/2026 4:06:40 PM] Debug: TaskParam snowConfiguration = Mobilize.Snow.Configuration.SnowConfiguration
+[4/17/2026 4:06:40 PM] Debug: TaskParam DashboardMode = False
+[4/17/2026 4:06:40 PM] Debug: TaskParam writeResultsProgressDescriptor = Mobilize.Common.Utils.Progress.SingleProgressDescriptor
+[4/17/2026 4:06:40 PM] Debug: TaskParam snowExecutionResult = Mobilize.Snow.Assessment.SnowExecutionResult
+[4/17/2026 4:06:40 PM] Debug: TaskParam ConversionEndTask.Input = /private/tmp/sc_full/source/input.wsp
+[4/17/2026 4:06:40 PM] Debug: TaskParam workingSet = Artinsoft.Common.Store.RepositoryWorkingSet`2[System.String,Artinsoft.Common.Store.IItemContainer]
+[4/17/2026 4:06:40 PM] Debug: TaskParam ConversionEndTask.ItemMedatada = Artinsoft.Common.Store.ItemMetadata
+[4/17/2026 4:06:40 PM] Debug: TaskParam ConversionEndTask.Enabled = True
+[4/17/2026 4:06:40 PM] Debug: TaskParam Repository = Artinsoft.Common.Store.Repository
+[4/17/2026 4:06:40 PM] Debug: TaskParam RepositoryDirectory = /private/tmp/sc_full/.scai/.snowconvert/.mobilize/CommonEF
+[4/17/2026 4:06:40 PM] Info: Updating code unit registry.
+[4/17/2026 4:06:40 PM] Info: Updating code unit registry finished.
+[4/17/2026 4:06:40 PM] Info: EFProcess 639120387957236370 ended. Execution time: 00:00:04.7460635
+[4/17/2026 4:06:40 PM] Info: STARTED Step 8/8: Stats and Reports
+[4/17/2026 4:06:40 PM] Info: Writing the conversion summary report
+[4/17/2026 4:06:41 PM] Info: Writing the Assessment report
+[4/17/2026 4:06:41 PM] Info: Writing the Scope Validations report
+[4/17/2026 4:06:41 PM] Info: Writing the raw assessment data report
+[4/17/2026 4:06:41 PM] Info: Writing the top level code unit report
+[4/17/2026 4:06:41 PM] Info: Writing the Issues report
+[4/17/2026 4:06:41 PM] Info: Writing the object dependencies report
+[4/17/2026 4:06:41 PM] Info: Writing the Elements report
+[4/17/2026 4:06:41 PM] Info: Writing the ETL and BI repointing report
+[4/17/2026 4:06:41 PM] Info: Writing the Functions Usage Report report
+[4/17/2026 4:06:41 PM] Info: Writing the object references report
+[4/17/2026 4:06:41 PM] Info: Writing the sql objects report
+[4/17/2026 4:06:41 PM] Info: Uploading metadata
+[4/17/2026 4:06:41 PM] Info: COMPLETED Step 8/8: Stats and Reports
+[4/17/2026 4:06:41 PM] Info: 
+==============================================================================
+SnowConvert assessment execution summary
+ - Files: 27
+ - Files Not Generated: 0
+ - Total lines of code: 2529
+ - Automatically converted: 94.54%
+ - Conversion time: 00:00:04
+ - Conversion speed: 519 lines of code per second
+See the report files for more details about the conversion status.
+==============================================================================
+
+[4/17/2026 4:06:41 PM] Info: 
+==============================================================================
+SnowConvert Tool.
+Copyright © 2023-2026 Snowflake Inc. All rights reserved.
+==============================================================================
+

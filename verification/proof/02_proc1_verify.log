@@ -1,0 +1,30 @@
+
+## 1. Re-seed fixtures on both engines
+- SQL Server: fixtures reloaded (`sqlserver/10_seed.sql`)
+- Snowflake:  fixtures reloaded (`snowflake/10_seed.sql`)
+
+## 2. Reload procedures
+- SQL Server: `usp_ProcessBudgetConsolidation` reloaded
+- Snowflake:  `usp_ProcessBudgetConsolidation` reloaded
+
+## 3. Invoke proc 1 on both engines (identical inputs)
+- SQL Server: target_id=9, rows_processed=23, error=(none)
+- Snowflake:  target_id=202, rows_processed=23, inserted=11, elim_updated=1
+
+## 4. Fetch consolidated rows (from the newly-created target header on each side)
+- SQL Server consolidated rows: 11
+- Snowflake consolidated rows:  11
+
+## 5. Row-by-row diff (natural key + FinalAmount)
+- **PASS** — all 11 rows match on (GLAccountID, CostCenterID, FiscalPeriodID, FinalAmount)
+
+## 6. Aggregate diff (SUM, COUNT)
+- SQL Server: SUM=52500.0000, COUNT=11
+- Snowflake:  SUM=52500.0000, COUNT=11
+- **PASS**
+
+## Overall
+- **VERIFICATION PASSED**: SQL Server baseline and Snowflake migration produced identical consolidated outputs.
+
+
+Report: /Users/shrey/Personal Projects/Assesment/solution_SnowConvertAI_final/verification/results/20260417T212621Z/summary.md
