@@ -14,12 +14,14 @@ Migration of an enterprise financial-planning / consolidation schema from SQL Se
 - [x] Phase 2 — Missing functions/views reconstructed: `tvf_ExplodeCostCenterHierarchy`, `fn_GetAllocationFactor`, `vw_AllocationRuleTargets` on both engines. Scope limited to objects actually called by procs 1 + 3 (deferred `fn_GetHierarchyPath`, `tvf_GetBudgetVariance`, `vw_BudgetConsolidationSummary`)
 - [x] Phase 3 — AI translation pipeline (`pipeline/extract.py` + `pipeline/translate.py` + `pipeline/run_sql.py` + `pipeline/verify.py`) and prompt template (`pipeline/prompts/translate_proc.md`)
 - [x] Phase 4 — Proc 1: `usp_ProcessBudgetConsolidation` migrated + verified — **cross-engine bit-exact match on 11 consolidated rows + aggregate** (see `verification/results/`)
-- [ ] Phase 5 — Proc 3: `usp_ExecuteCostAllocation` migrated + verified (deferred — functions + view are ready)
-- [ ] Phase 6 — (Stretch) Proc 5 OR SnowConvert tool comparison (deferred)
+- [x] Phase 5 — Proc 3: `usp_ExecuteCostAllocation` migrated + verified — **cross-engine bit-exact match on 6 allocated rows + aggregate** (see `verification/results/proc3_*/`)
+- [x] Phase 6 — SnowConvert tool comparison — official `scai` CLI installed and run on pristine T-SQL; measured head-to-head vs. hand-crafted migration (see `snowconvert/APPENDIX.md`)
 - [x] Phase 7 — Writeup (this README)
 - [ ] Phase 8 — End-to-end rerun on a fresh Snowflake session
 
 ## Results snapshot
+
+### Proc 1 — `usp_ProcessBudgetConsolidation`
 
 | Metric | SQL Server baseline | Snowflake migration | Match |
 |---|---|---|---|
@@ -28,6 +30,29 @@ Migration of an enterprise financial-planning / consolidation schema from SQL Se
 | Row-by-row on (GLAccount, CostCenter, FiscalPeriod, FinalAmount) | — | — | ✓ all 11 |
 | Intercompany eliminations applied | 1 | 1 | ✓ |
 | Proc succeeded | yes | yes | ✓ |
+
+### Proc 3 — `usp_ExecuteCostAllocation`
+
+| Metric | SQL Server baseline | Snowflake migration | Match |
+|---|---|---|---|
+| Allocated rows inserted | 6 | 6 | ✓ |
+| `SUM(OriginalAmount)` on allocations | 32600.0000 | 32600.0000 | ✓ |
+| Row-by-row on (GL, CC, FP, OriginalAmount, AllocationSourceLineID, AllocationPercentage) | — | — | ✓ all 6 |
+| Proc succeeded | yes | yes | ✓ |
+
+### Proc 1 — scai vs. hand-crafted (see `snowconvert/APPENDIX.md` for the full 12-row construct comparison)
+
+| Metric | scai output | Hand-crafted |
+|---|---|---|
+| Language choice | Snowflake Scripting ✓ | Snowflake Scripting ✓ |
+| Lines of output | 595 | 383 |
+| `!!!RESOLVE EWI!!!` human-intervention markers | 16 | 0 |
+| Compiles on Snowflake as-is | No (fails line 39 on literal marker) | Yes |
+| Passes `pipeline/verify.py` | N/A (can't compile) | Yes, bit-exact |
+| Caught Latent Bug #1 (dynamic-SQL on `@`-table) | Accidentally neutralized via substrate change | Deliberately unrolled + documented |
+| Caught Latent Bug #2 (`'CONSOLIDATED'` → VARCHAR(10)) | No (carried through twice) | Yes (`'CONSOL'`) |
+| Cursors rewritten to set-based | No (preserved as Scripting loops with PRF-0003 warning) | Yes (GROUP BY + LAG) |
+| scai CodeCompletenessScore | 94.44% | — |
 
 ---
 
@@ -253,18 +278,21 @@ Each "lossy" entry in the idiom map is documented here. "Lossy" means the Snowfl
 
 ## What I'd Do With More Time
 
-- **Ship proc 3** (`usp_ExecuteCostAllocation`). The functions + view it needs are already reconstructed on both engines. Expected to take another ~3 hours; the main new territory is the recursive-CTE cycle detection in the rule-dependency closure and the set-based replacement for the `sp_getapplock` / `WAITFOR` concurrency pattern.
-- **Run SnowConvert** on proc 1, diff its output against my hand-crafted migration, and write up a paragraph per divergence. Highest signal for this specific role — the team builds the tool, so a frank comparison of where it's strong and where it's weak carries weight.
-- **Seed a 100x larger fixture** (~100k line items, cycles in the CostCenter hierarchy, richer XML/JSON target specs) to exercise branches the current 12-row fixture doesn't touch — especially the `INCREMENTAL` consolidation type and the `@MaxIterations` safeguard in proc 1's cursor loop.
+- **Run `pipeline/translate.py` end-to-end over proc 1** (not just `--dry-run`) and diff its output against both scai's output and the hand-crafted migration. Three-way comparison makes the claim "the pipeline is the second layer on top of scai" concretely testable.
+- **Feed scai's `!!!RESOLVE EWI!!!` markers into the pipeline as the prompt's starting point.** The marker locations are a machine-readable handoff from Layer 1 (scai) to Layer 2 (AI review). Demonstrating that handoff automated is the natural next deliverable.
+- **Seed a 100x larger fixture** (~100k line items, cycles in the CostCenter hierarchy, richer XML/JSON target specs) to exercise branches the current fixture doesn't touch — especially the `INCREMENTAL` consolidation type, `@MaxIterations` safeguard in proc 1's cursor loop, and transitive rule-dependency cycle detection in proc 3.
 - **Close the RowHash cross-engine gap** by computing SHA2 over a canonicalised concat string (pad decimals to fixed width) on both sides. Would let the row-level diff include RowHash.
 - **Wrap `translate.py` in a retry-on-fail loop** that feeds compile + verification errors back into the prompt as correction context. Right now it's one-shot.
-- **Add parameter-branch coverage** to `verify.py` — exercise `@ConsolidationType=INCREMENTAL`, `@IncludeEliminations=0`, non-NULL `@ProcessingOptions`. Currently only the happy path.
+- **Add parameter-branch coverage** to `verify.py` / `verify_proc3.py` — exercise `@ConsolidationType=INCREMENTAL`, `@IncludeEliminations=0`, non-NULL `@ProcessingOptions`, and proc 3's `@ConcurrencyMode=EXCLUSIVE` path. Currently only the happy path.
+- **Migrate procs 4, 5, 6** (forecast, reconcile, bulk-import). Each exposes a distinct class of T-SQL → Snowflake idiom challenge (global temp tables, OPENXML, BULK INSERT / COPY INTO).
 
 ---
 
 ## Appendix: SnowConvert Tool Comparison
 
-Deferred — would have been the highest-signal deliverable for this specific role. Running SnowConvert on proc 1 and diffing it against our hand-crafted migration is the first thing I'd do with another hour.
+**Done.** See `snowconvert/APPENDIX.md` for the full 12-row construct-by-construct comparison between scai's output and the hand-crafted migration, plus a 3-paragraph synthesis. Headline: scai produces a high-quality Snowflake Scripting skeleton in 11 seconds, but does **not compile as-is** — emits 16 `!!!RESOLVE EWI!!!` markers requiring human judgment. Hand-crafted compiles and passes `pipeline/verify.py` bit-exact. The right production architecture is both: scai as Layer 1 (syntactic translation), an AI pipeline as Layer 2 (semantic review + marker resolution), `verify.py` as Layer 3 (cross-engine validation).
+
+See also `snowconvert/RUN_LOG.md` for the install + invocation history, and `snowconvert/output/` for scai's raw output artifacts (preserved verbatim — `procedures/`, `tables/`, `types/`, `helpers/`, `reports/`).
 
 ---
 
