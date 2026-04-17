@@ -9,8 +9,8 @@ Migration of an enterprise financial-planning / consolidation schema from SQL Se
 
 ## Ship Checklist
 
-- [ ] Phase 0 — SQL Server + Snowflake reachable, baseline schemas created
-- [ ] Phase 1 — Full schema (8 tables + 3 UDTTs) migrated to Snowflake
+- [x] Phase 0 — SQL Server container + Snowflake account reachable; `Planning` DB + `WH_XS` / `PLANNING_DB.PLANNING` provisioned
+- [x] Phase 1 — Schemas loaded on both engines: `sqlserver/01_schema.sql` (baseline, FILESTREAM keyword stripped for Docker compat) + `snowflake/01_schema.sql` (migrated, with per-table translation rationale inline)
 - [ ] Phase 2 — Missing functions/views reconstructed (`tvf_ExplodeCostCenterHierarchy`, etc.)
 - [ ] Phase 3 — AI translation pipeline runnable end-to-end
 - [ ] Phase 4 — Proc 1: `usp_ProcessBudgetConsolidation` migrated + verified
