@@ -240,26 +240,29 @@ BEGIN
 
     -- =====================================================================
     -- Step 4: Intercompany eliminations (replaces SCROLL KEYSET cursor)
-    -- The cursor walked intercompany rows in ORDER BY GLAccountID, CostCenterID
-    -- and matched pairs where row N+1's amount = -row N's amount.  Equivalent
-    -- set-based form: LEAD over same ordering, apply elimination on rows
-    -- whose LEAD(amount) negates their own.
+    -- The cursor walked intercompany rows in ORDER BY (GLAccountID, CostCenterID)
+    -- and, when row N's amount offset row N+1's, applied elim on ROW N+1
+    -- (because FETCH RELATIVE 1 had reassigned the key variables to N+1's
+    -- values before the UPDATE ran — subtle behaviour).  Equivalent set-based
+    -- form: LAG over same ordering, apply elim to rows whose predecessor had
+    -- an offsetting amount.  This preserves the per-row distribution, not just
+    -- the aggregate total.
     -- =====================================================================
     IF (:include_eliminations) THEN
         current_step := 'Intercompany Eliminations';
         step_start_time := CURRENT_TIMESTAMP()::TIMESTAMP_NTZ;
 
         UPDATE t_consolidated_amounts ca
-        SET elimination_amt = ca.elimination_amt + p.FinalAmount
+        SET elimination_amt = ca.elimination_amt + p.prev_amt
         FROM (
             SELECT
                 bli.GLAccountID,
                 bli.CostCenterID,
                 bli.FiscalPeriodID,
                 bli.FinalAmount,
-                LEAD(bli.FinalAmount) OVER (
+                LAG(bli.FinalAmount) OVER (
                     ORDER BY bli.GLAccountID, bli.CostCenterID
-                ) AS next_amt
+                ) AS prev_amt
             FROM BudgetLineItem bli
             INNER JOIN GLAccount gla ON bli.GLAccountID = gla.GLAccountID
             WHERE bli.BudgetHeaderID = :source_budget_header_id
@@ -269,7 +272,7 @@ BEGIN
           AND ca.cost_center_id   = p.CostCenterID
           AND ca.fiscal_period_id = p.FiscalPeriodID
           AND p.FinalAmount <> 0
-          AND p.next_amt = -p.FinalAmount;
+          AND p.prev_amt = -p.FinalAmount;
 
         elim_updated := SQLROWCOUNT;
 
