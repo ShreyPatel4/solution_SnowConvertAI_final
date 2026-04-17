@@ -38,7 +38,7 @@ DELETE FROM FiscalPeriod;
 
 
 -- -----------------------------------------------------------------------------
--- FiscalPeriod
+-- FiscalPeriod (Q1 2026 + Apr-Jun open periods for proc 4 forecast)
 -- -----------------------------------------------------------------------------
 INSERT INTO FiscalPeriod
     (FiscalPeriodID, FiscalYear, FiscalQuarter, FiscalMonth, PeriodName,
@@ -46,7 +46,10 @@ INSERT INTO FiscalPeriod
 VALUES
     (1, 2026, 1, 1, 'Jan 2026', '2026-01-01', '2026-01-31', FALSE, FALSE),
     (2, 2026, 1, 2, 'Feb 2026', '2026-02-01', '2026-02-28', FALSE, FALSE),
-    (3, 2026, 1, 3, 'Mar 2026', '2026-03-01', '2026-03-31', FALSE, FALSE);
+    (3, 2026, 1, 3, 'Mar 2026', '2026-03-01', '2026-03-31', FALSE, FALSE),
+    (4, 2026, 2, 4, 'Apr 2026', '2026-04-01', '2026-04-30', FALSE, FALSE),
+    (5, 2026, 2, 5, 'May 2026', '2026-05-01', '2026-05-31', FALSE, FALSE),
+    (6, 2026, 2, 6, 'Jun 2026', '2026-06-01', '2026-06-30', FALSE, FALSE);
 
 
 -- -----------------------------------------------------------------------------
@@ -80,6 +83,10 @@ VALUES
     (4, '7000', 'Intercompany Payable',    'L', TRUE, TRUE, 'C', TRUE,  TRUE),
     (5, '8000', 'Intercompany Receivable', 'A', TRUE, TRUE, 'D', TRUE,  TRUE);
 
+-- Wire IC accounts to each other for proc 5's pair matching.
+UPDATE GLAccount SET ConsolidationAccountID = 5 WHERE GLAccountID = 4;
+UPDATE GLAccount SET ConsolidationAccountID = 4 WHERE GLAccountID = 5;
+
 
 -- -----------------------------------------------------------------------------
 -- BudgetHeader
@@ -88,7 +95,9 @@ INSERT INTO BudgetHeader
     (BudgetHeaderID, BudgetCode, BudgetName, BudgetType, ScenarioType,
      FiscalYear, StartPeriodID, EndPeriodID, StatusCode, VersionNumber, IsLocked)
 VALUES
-    (1, 'FY26_BASE', 'FY26 Base Budget', 'ANNUAL', 'BASE',
+    (1, 'FY26_BASE',       'FY26 Base Budget',       'ANNUAL', 'BASE',
+     2026, 1, 3, 'APPROVED', 1, FALSE),
+    (2, 'FY26_IC_FIXTURE', 'FY26 IC Reconcile Data', 'ANNUAL', 'BASE',
      2026, 1, 3, 'APPROVED', 1, FALSE);
 
 
@@ -126,6 +135,32 @@ FROM VALUES
 AS v(id, gl, cc, fp, orig, adj);
 
 
+-- IC fixture rows under BudgetHeader 2 (proc 5 pair-matching smoke-test).
+-- Pair 1 (reconciled):        SALES_NA payable 1000 vs SALES receivable -1000   (variance 0)
+-- Pair 2 (out of tolerance):  SALES_EU payable  500 vs OPS receivable   -400    (variance 100)
+INSERT INTO BudgetLineItem
+    (BudgetLineItemID, BudgetHeaderID, GLAccountID, CostCenterID, FiscalPeriodID,
+     OriginalAmount, AdjustedAmount, FinalAmount, IsAllocated, RowHash)
+SELECT
+    id, 2, gl, cc, fp,
+    orig, adj,
+    orig + adj,
+    FALSE,
+    SHA2(
+        CAST(gl AS VARCHAR) || '|' ||
+        CAST(cc AS VARCHAR) || '|' ||
+        CAST(fp AS VARCHAR) || '|' ||
+        CAST(orig + adj AS VARCHAR),
+        256
+    )
+FROM VALUES
+    (100, 4, 5, 1,  1000.0000, 0.0000),
+    (101, 5, 2, 1, -1000.0000, 0.0000),
+    (102, 4, 6, 1,   500.0000, 0.0000),
+    (103, 5, 3, 1,  -400.0000, 0.0000)
+AS v(id, gl, cc, fp, orig, adj);
+
+
 -- -----------------------------------------------------------------------------
 -- AllocationRule (for proc 3 — usp_ExecuteCostAllocation).
 -- Mirrors sqlserver/10_seed.sql.  TargetSpecification is VARIANT JSON here
@@ -159,7 +194,7 @@ AS v(id, code, rname, rtype, amethod, scc, sccp, sap, tspec, basis, rmeth, rprec
 
 
 -- -----------------------------------------------------------------------------
--- Row-count verification (expected: 3, 7, 5, 1, 12, 2)
+-- Row-count verification (expected: 6, 7, 5, 2, 16, 2)
 -- -----------------------------------------------------------------------------
 SELECT 'FiscalPeriod'   AS TableName, COUNT(*) AS N FROM FiscalPeriod
 UNION ALL SELECT 'CostCenter',     COUNT(*) FROM CostCenter

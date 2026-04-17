@@ -1,4 +1,4 @@
-# Proc 1 Migration Verification — run 20260417T215656Z
+# Proc 1 Migration Verification — run 20260417T215323Z
 
 Source proc: `original/src/StoredProcedures/usp_ProcessBudgetConsolidation.sql`  
 SQL Server baseline (patched): `sqlserver/04_procedures.sql`  
@@ -13,8 +13,8 @@ Snowflake migration: `snowflake/04_procedures.sql`
 - Snowflake:  `usp_ProcessBudgetConsolidation` reloaded
 
 ## 3. Invoke proc 1 on both engines (identical inputs)
-- SQL Server: target_id=11, rows_processed=23, error=(none)
-- Snowflake:  target_id=206, rows_processed=23, inserted=11, elim_updated=1
+- SQL Server: target_id=10, rows_processed=23, error=(none)
+- Snowflake:  target_id=204, rows_processed=23, inserted=11, elim_updated=1
 
 ## 4. Fetch consolidated rows (from the newly-created target header on each side)
 - SQL Server consolidated rows: 11
@@ -31,5 +31,3 @@ Snowflake migration: `snowflake/04_procedures.sql`
 ## Overall
 - **VERIFICATION PASSED**: SQL Server baseline and Snowflake migration produced identical consolidated outputs.
 
-
-Report: /Users/shrey/Personal Projects/Assesment/solution_SnowConvertAI_final/verification/results/20260417T215656Z/summary.md

@@ -3,7 +3,7 @@
 > **Status: MEASURED (2026-04-17).** scai was installed (`brew install --cask snowconvert-ai`, v2.20.0) and run on the pristine T-SQL under `snowconvert/input/`. Output is preserved verbatim at `snowconvert/output/`; assessment reports at `snowconvert/output/reports/` (`Issues.csv`, `Assessment.csv`, `SqlObjects.csv`).
 >
 > **Input under test:** `snowconvert/input/procedures/usp_ProcessBudgetConsolidation.sql` (pristine T-SQL - no in-file patches).
-> **Hand-crafted reference:** `snowflake/04_procedures.sql` (verified bit-exact on 11 rows + aggregate by `pipeline/verify.py`).
+> **Hand-crafted reference:** `snowflake/04_procedures.sql` (verified row-level on 11 rows + aggregate by `pipeline/verify.py`).
 > **scai output (raw):** `snowconvert/output/procedures/usp_processbudgetconsolidation.sql` (595 lines).
 > **scai Assessment:** 23 files processed, 816 LOC converted, **74 issues total** (10 unique EWI / 9 unique FDM / 1 unique PRF), `CodeCompletenessScore = 94.44%`, **3 Critical parse errors** on schema DDL files.
 >
@@ -35,7 +35,7 @@
 | Lines of output | **595** | **383** |
 | `!!!RESOLVE EWI!!!` human-intervention markers | **16** | **0** |
 | Compiles on Snowflake as-is | **No** (fails on literal marker line 39) | **Yes** |
-| Passes `pipeline/verify.py` bit-exact | **N/A** (can't even compile) | **Yes** (11/11 rows + aggregate) |
+| Passes `pipeline/verify.py` row-level diff | **N/A** (can't even compile) | **Yes** (11/11 rows + aggregate) |
 | Catches Latent Bug #1 (dynamic-SQL on table-var) | Accidentally neutralized via target-language difference - no warning | Explicitly unrolled, documented |
 | Catches Latent Bug #2 (`'CONSOLIDATED'` on VARCHAR(10)) | **No** - passed through verbatim twice | **Yes** |
 | Cursors → set-based | **No** (preserved as Scripting loops) | **Yes** (GROUP BY + LAG) |

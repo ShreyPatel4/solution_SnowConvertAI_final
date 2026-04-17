@@ -6,4 +6,4 @@ Running 4 statement(s) from test_proc6.sql
   [3/4] USE WAREHOUSE WH_XS
       -> ('Statement executed successfully.',)
   [4/4] CALL PLANNING_DB.PLANNING.usp_BulkImportBudgetData(
-      -> ('{\n  "batch_id": "733a8f6a-a041-4374-9e77-ddd6f8868e94",\n  "batch_size": 10000,\n  "batches_processed": 2,\n  "duration_ms": 4054,\n  "invalid_rows": 0,\n  "rows_imported": 1,\n  "rows_rejected": 0,\n  "source": "TVP",\n  "success": true,\n  "target_budget_id": 1,\n  "total_rows": 1,\n  "valid_rows": 1\n}',)
+      -> ('{\n  "batch_id": "cd0b25b2-5a6c-4347-9cdf-9ddaa2d63502",\n  "batch_size": 10000,\n  "batches_processed": 2,\n  "duration_ms": 3695,\n  "invalid_rows": 0,\n  "rows_imported": 1,\n  "rows_rejected": 0,\n  "source": "TVP",\n  "success": true,\n  "target_budget_id": 1,\n  "total_rows": 1,\n  "valid_rows": 1\n}',)

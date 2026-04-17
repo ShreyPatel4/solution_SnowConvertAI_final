@@ -31,5 +31,3 @@ Snowflake migration: `snowflake/04_procedures.sql`
 ## Overall
 - **VERIFICATION PASSED**: SQL Server baseline and Snowflake migration produced identical consolidated outputs.
 
-
-Report: /Users/shrey/Personal Projects/Assesment/solution_SnowConvertAI_final/verification/results/20260417T215656Z/summary.md

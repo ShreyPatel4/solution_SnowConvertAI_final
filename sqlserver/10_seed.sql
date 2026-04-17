@@ -51,7 +51,9 @@ GO
 
 
 -- -----------------------------------------------------------------------------
--- FiscalPeriod (3 rows: Q1 2026 by month)
+-- FiscalPeriod (6 rows: Q1 2026 closed; Apr-Jun 2026 open for proc 4 forecast)
+-- Rows 1-3 are the budget's active quarter. Rows 4-6 exist so proc 4's
+-- GenerateRollingForecast can project forecasts into future open periods.
 -- -----------------------------------------------------------------------------
 SET IDENTITY_INSERT Planning.FiscalPeriod ON;
 INSERT INTO Planning.FiscalPeriod
@@ -60,7 +62,10 @@ INSERT INTO Planning.FiscalPeriod
 VALUES
     (1, 2026, 1, 1, 'Jan 2026', '2026-01-01', '2026-01-31', 0, 0),
     (2, 2026, 1, 2, 'Feb 2026', '2026-02-01', '2026-02-28', 0, 0),
-    (3, 2026, 1, 3, 'Mar 2026', '2026-03-01', '2026-03-31', 0, 0);
+    (3, 2026, 1, 3, 'Mar 2026', '2026-03-01', '2026-03-31', 0, 0),
+    (4, 2026, 2, 4, 'Apr 2026', '2026-04-01', '2026-04-30', 0, 0),
+    (5, 2026, 2, 5, 'May 2026', '2026-05-01', '2026-05-31', 0, 0),
+    (6, 2026, 2, 6, 'Jun 2026', '2026-06-01', '2026-06-30', 0, 0);
 SET IDENTITY_INSERT Planning.FiscalPeriod OFF;
 GO
 
@@ -117,16 +122,27 @@ VALUES
 SET IDENTITY_INSERT Planning.GLAccount OFF;
 GO
 
+-- Wire IC accounts to each other for proc 5's pair matching.
+UPDATE Planning.GLAccount SET ConsolidationAccountID = 5 WHERE GLAccountID = 4;
+UPDATE Planning.GLAccount SET ConsolidationAccountID = 4 WHERE GLAccountID = 5;
+GO
+
 
 -- -----------------------------------------------------------------------------
--- BudgetHeader (1 row, APPROVED — required by proc 1's validation guard)
+-- BudgetHeader
+--   ID 1: the main FY26 budget. Required by proc 1's APPROVED validation.
+--   ID 2: a separate intercompany fixture used only by proc 5's reconcile
+--         smoke-test so that proc 1 and proc 3 verification against ID 1
+--         stay unaffected by added IC line items.
 -- -----------------------------------------------------------------------------
 SET IDENTITY_INSERT Planning.BudgetHeader ON;
 INSERT INTO Planning.BudgetHeader
     (BudgetHeaderID, BudgetCode, BudgetName, BudgetType, ScenarioType,
      FiscalYear, StartPeriodID, EndPeriodID, StatusCode, VersionNumber)
 VALUES
-    (1, 'FY26_BASE', 'FY26 Base Budget', 'ANNUAL', 'BASE',
+    (1, 'FY26_BASE',        'FY26 Base Budget',       'ANNUAL', 'BASE',
+     2026, 1, 3, 'APPROVED', 1),
+    (2, 'FY26_IC_FIXTURE',  'FY26 IC Reconcile Data', 'ANNUAL', 'BASE',
      2026, 1, 3, 'APPROVED', 1);
 SET IDENTITY_INSERT Planning.BudgetHeader OFF;
 GO
@@ -160,7 +176,14 @@ VALUES
     (9,  1, 4, 5, 1,   1000.0000,    0.0000, 0),
     (10, 1, 5, 5, 1,  -1000.0000,    0.0000, 0),
     (11, 1, 3, 5, 3,      0.0000,    0.0000, 0),
-    (12, 1, 2, 7, 3,   5000.0000, -500.0000, 0);
+    (12, 1, 2, 7, 3,   5000.0000, -500.0000, 0),
+    -- IC fixture rows under BudgetHeader 2 (proc 5 pair-matching smoke-test).
+    -- Pair 1 (reconciled):   SALES_NA payable 1000 <-> SALES receivable -1000  (variance 0)
+    -- Pair 2 (out of tolerance): SALES_EU payable 500 <-> OPS receivable -400  (variance 100)
+    (100, 2, 4, 5, 1,   1000.0000,    0.0000, 0),
+    (101, 2, 5, 2, 1,  -1000.0000,    0.0000, 0),
+    (102, 2, 4, 6, 1,    500.0000,    0.0000, 0),
+    (103, 2, 5, 3, 1,   -400.0000,    0.0000, 0);
 SET IDENTITY_INSERT Planning.BudgetLineItem OFF;
 GO
 
@@ -212,7 +235,7 @@ GO
 
 
 -- -----------------------------------------------------------------------------
--- Row-count verification (expected: 3, 7, 5, 1, 12, 2)
+-- Row-count verification (expected: 6, 7, 5, 2, 16, 2)
 -- -----------------------------------------------------------------------------
 SELECT 'FiscalPeriod'   AS TableName, COUNT(*) AS N FROM Planning.FiscalPeriod
 UNION ALL

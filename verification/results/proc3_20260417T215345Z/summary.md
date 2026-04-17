@@ -1,4 +1,4 @@
-# Proc 3 Migration Verification — run 20260417T215719Z
+# Proc 3 Migration Verification — run 20260417T215345Z
 
 Source proc: `original/src/StoredProcedures/usp_ExecuteCostAllocation.sql`  
 SQL Server baseline (patched): `sqlserver/05_procedures.sql`  
@@ -31,5 +31,3 @@ Snowflake migration:           `snowflake/05_procedures.sql`
 ## Overall
 - **VERIFICATION PASSED**: SQL Server baseline and Snowflake migration produced identical allocation outputs.
 
-
-Report: /Users/shrey/Personal Projects/Assesment/solution_SnowConvertAI_final/verification/results/proc3_20260417T215719Z/summary.md

@@ -337,7 +337,8 @@ BEGIN
      ORDER BY CreatedDateTime DESC
      LIMIT 1;
 
-    -- Insert forecast line items
+    -- Insert forecast line items. SpreadMethodCode is VARCHAR(10); map the
+    -- forecast_method param to a short code instead of passing it raw.
     INSERT INTO BudgetLineItem (
         BudgetHeaderID, GLAccountID, CostCenterID, FiscalPeriodID,
         OriginalAmount, AdjustedAmount, SpreadMethodCode, SourceSystem
@@ -349,8 +350,14 @@ BEGIN
         FiscalPeriodID,
         ForecastAmount,
         0,
-        :forecast_method,
-        'ROLLING_FORECAST'
+        CASE :forecast_method
+            WHEN 'WEIGHTED_AVERAGE' THEN 'W_AVG'
+            WHEN 'LINEAR_TREND'     THEN 'LINEAR'
+            WHEN 'EXPONENTIAL'      THEN 'EXP'
+            WHEN 'SEASONAL'         THEN 'SEASONAL'
+            ELSE LEFT(:forecast_method, 10)
+        END,
+        'FORECAST'
     FROM T_ForecastWorkspace
     WHERE IsForecast = TRUE
       AND ForecastAmount IS NOT NULL;
