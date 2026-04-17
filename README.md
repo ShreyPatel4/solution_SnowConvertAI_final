@@ -8,18 +8,22 @@ The provided `src/` zip is an enterprise financial-planning schema — 8 tables,
 
 The task: stand up SQL Server locally, provision a Snowflake account, migrate the schema, and port as many of six named procedures as reasonable. At minimum: proc 1.
 
-## 2. Scope delivered
+## 2. Scope delivered — all 6 procs migrated, two tiers
 
-| # | Stored procedure | Approach | Verified cross-engine? |
+| # | Stored procedure | Approach | Status |
 |---|---|---|---|
-| 1 | `usp_ProcessBudgetConsolidation` | Hand-migrated | **Yes** — bit-exact, 11 rows, `SUM(FinalAmount) = 52500.0000` |
-| 2 | `usp_PerformFinancialClose` | scai pipeline output | No — committed as raw output for review |
-| 3 | `usp_ExecuteCostAllocation` | Hand-migrated | **Yes** — bit-exact, 6 rows, `SUM(OriginalAmount) = 32600.0000` |
-| 4 | `usp_GenerateRollingForecast` | scai pipeline output | No — committed as raw output for review |
-| 5 | `usp_ReconcileIntercompanyBalances` | scai pipeline output | No — committed as raw output for review |
-| 6 | `usp_BulkImportBudgetData` | scai pipeline output | No — committed as raw output for review |
+| 1 | `usp_ProcessBudgetConsolidation` | **Hand-migrated** | **Bit-exact verified** — 11 rows, `SUM(FinalAmount) = 52500.0000` |
+| 3 | `usp_ExecuteCostAllocation` | **Hand-migrated** | **Bit-exact verified** — 6 rows, `SUM(OriginalAmount) = 32600.0000` |
+| 2 | `usp_PerformFinancialClose` | **Hybrid AI** — scai + human EWI cleanup | Compiles + smoke-test CALL returns `status=COMPLETED`, 3 steps, 0 failed |
+| 4 | `usp_GenerateRollingForecast` | **Hybrid AI** — scai + human EWI cleanup | Compiles + smoke-test CALL returns `success=true`, 19 historical rows |
+| 5 | `usp_ReconcileIntercompanyBalances` | **Hybrid AI** — scai + human EWI cleanup | Compiles + smoke-test CALL returns `success=true`, full report |
+| 6 | `usp_BulkImportBudgetData` | **Hybrid AI** — scai + human EWI cleanup | Compiles + smoke-test CALL returns `success=true`, 1 row imported |
 
-Schema, 3 UDTTs, the functions + views the converted procs depend on, and identical seed fixtures are loaded on **both engines**.
+Schema (8 tables + 3 UDTTs), the functions + views the converted procs depend on, and identical seed fixtures are loaded on **both engines**.
+
+**Tier definitions**:
+- **Bit-exact verified**: SQL Server baseline and Snowflake migration re-seeded from identical fixtures, proc called on both sides, output diffed row-by-row on natural keys + aggregate. Zero divergence.
+- **Hybrid AI**: scai's raw auto-translation (at `snowconvert/output_full/procedures/`) was cleaned up by hand (BOM stripped, all `!!!RESOLVE EWI!!!` markers resolved or stubbed, T-SQL debris like `@@TRANCOUNT` / `SAVE TRANSACTION` / `OUTPUT INTO` dropped per the playbook documented in `snowconvert/APPENDIX.md`). Smoke-test = proc compiles in Snowflake and runs to completion on happy-path input without error. **Does NOT prove bit-exact equivalence** to the SQL Server baseline — branch coverage is limited to the happy path and a small number of TODO-stubbed edge branches. See `verification/results/smoke_20260417T204500Z/summary.md` for per-proc smoke-test inputs, outputs, and known-suspect areas.
 
 ## 3. How to run
 
@@ -36,13 +40,19 @@ python pipeline/run_sql.py snowflake/00_bootstrap.sql
 python pipeline/run_sql.py snowflake/01_schema.sql
 python pipeline/run_sql.py snowflake/02_functions.sql
 python pipeline/run_sql.py snowflake/03_views.sql
-python pipeline/run_sql.py snowflake/04_procedures.sql
-python pipeline/run_sql.py snowflake/05_procedures.sql
+python pipeline/run_sql.py snowflake/04_procedures.sql   # proc 1 (hand)
+python pipeline/run_sql.py snowflake/05_procedures.sql   # proc 3 (hand)
+python pipeline/run_sql.py snowflake/06_procedures.sql   # proc 2 (hybrid AI)
+python pipeline/run_sql.py snowflake/07_procedures.sql   # proc 4 (hybrid AI)
+python pipeline/run_sql.py snowflake/08_procedures.sql   # proc 5 (hybrid AI)
+python pipeline/run_sql.py snowflake/09_procedures.sql   # proc 6 (hybrid AI)
 python pipeline/run_sql.py snowflake/10_seed.sql
 
-# Verify
-python pipeline/verify.py          # proc 1
-python pipeline/verify_proc3.py    # proc 3
+# Verify (bit-exact, procs 1 + 3)
+python pipeline/verify.py
+python pipeline/verify_proc3.py
+
+# Smoke-test the 4 hybrid AI procs (happy-path CALL per verification/results/smoke_*/summary.md)
 ```
 
 ## 4. Verification (PDF Q2)
@@ -75,7 +85,7 @@ Installed `scai` v2.20.0 (Homebrew cask), ran it on pristine T-SQL, captured raw
 **Layer 3 — verification harness.**
 Anything AI produces has to pass the cross-engine bit-exact diff to count as migrated. AI writes; the harness decides.
 
-**Honest scope**: procs 1 and 3 are hand-translated (see §6). The pipeline and scai produced the outputs committed for procs 2/4/5/6 — reviewable, but not verified in this 24-hour window.
+**Honest scope**: procs 1 and 3 are hand-translated + bit-exact verified (see §6). Procs 2, 4, 5, 6 are **hybrid**: scai produced the first-pass skeleton; I then cleaned up EWI markers and T-SQL debris per the APPENDIX playbook, loaded into Snowflake, and ran a happy-path smoke-test CALL on each. All four return `success: true` (or the equivalent `status: COMPLETED` for proc 2) — see `verification/results/smoke_20260417T204500Z/summary.md`. Bit-exact cross-engine verification was out of scope for the 24-hour window on these four; their cleanup still includes TODO-stubs on branches the smoke test doesn't exercise.
 
 ## 6. What I did manually — and why
 
@@ -133,4 +143,4 @@ solution_SnowConvertAI_final/
 
 ## 10. What I'd do with more time
 
-Hand-migrate + verify procs 2, 4, 5, 6 (scai raw output is committed for review; verification would follow the same harness pattern). Wrap `translate.py` in a retry loop that feeds compile/verify errors back into the prompt. Add parameter-branch coverage to the harnesses (currently only happy path — `INCREMENTAL` consolidation, `@IncludeEliminations=0`, proc 3's `EXCLUSIVE` concurrency path are untested). Seed a 100× larger fixture to exercise `@MaxIterations` and rule-dependency cycle detection. Canonicalise DECIMAL formatting so `RowHash` can re-enter the diff.
+Promote procs 2, 4, 5, 6 from **hybrid smoke-tested** to **bit-exact verified** by writing per-proc verification harnesses on the `verify.py` / `verify_proc3.py` pattern. Resolve the TODO-stubbed branches each proc currently skips (FINAL-close re-raises in proc 2; PIVOT + SUMMARY modes in proc 4; `entity_codes` non-NULL branch in proc 5; BULK INSERT / OPENROWSET / OPENQUERY modes in proc 6 — see `verification/results/smoke_*/summary.md` for the exact list). Rewrite proc 4's `PERCENTILE_CONT` via `ROW_NUMBER` / `COUNT` so `confidence_level` can be dynamic again. Wrap `translate.py` in a retry loop that feeds compile/verify errors back into the prompt — right now it's one-shot. Add parameter-branch coverage to the harnesses (currently only happy path — `INCREMENTAL` consolidation, `@IncludeEliminations=0`, proc 3's `EXCLUSIVE` concurrency path are untested). Seed a 100× larger fixture to exercise `@MaxIterations`, rule-dependency cycle detection, and non-trivial reconciliation pairs. Canonicalise DECIMAL formatting so `RowHash` can re-enter the diff.
