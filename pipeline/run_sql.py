@@ -40,12 +40,20 @@ cur = conn.cursor()
 text = sql_path.read_text()
 stmts = []
 buf: list[str] = []
+in_dollar_block = False
 for line in text.splitlines():
     stripped = line.strip()
-    if stripped.startswith("--") or not stripped:
-        continue
+    # Outside a $$...$$ block, skip blank lines and full-line comments.
+    if not in_dollar_block:
+        if not stripped or stripped.startswith("--"):
+            continue
     buf.append(line)
-    if stripped.rstrip().endswith(";"):
+    # A line with an odd number of `$$` tokens flips block state.
+    if line.count("$$") % 2 == 1:
+        in_dollar_block = not in_dollar_block
+    # Statement terminator is `;` at EOL, but only OUTSIDE a $$ block —
+    # procedure bodies contain many `;`-terminated inner statements.
+    if not in_dollar_block and stripped.rstrip().endswith(";"):
         stmt = "\n".join(buf).rstrip().rstrip(";").strip()
         if stmt:
             stmts.append(stmt)
